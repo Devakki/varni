@@ -35,6 +35,7 @@ class  Item extends CI_Controller {
 				$msg="item insert ".$name;
 				$this->LogModel->simplelog($msg);
 				$detail=['item_name'=>$name,
+							'hsn_code'=>$this->input->post("hsn_code"),
 							'status'=>'1',
 							'user_id'=>$_SESSION['auth_user_id'],
 							'created_at'=>date("Y-m-d h:i:s")];
@@ -62,6 +63,7 @@ class  Item extends CI_Controller {
             $created = date( 'jS M Y', strtotime($m_data->created_at));
             $data[] = 	[$i,	        				
     					$m_data->item_name,
+    					$m_data->hsn_code,
     					'<a href="'.base_url('item/get_editfrm/').$m_data->item_id .'"><button type="button" class="btn btn-custom btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>'];
         }
         $output = array(
@@ -100,6 +102,7 @@ class  Item extends CI_Controller {
 					$msg="item Update ".$name;
 					$this->LogModel->simplelog($msg);
 		    		$detail=['item_name'=>$name,
+					'hsn_code'=>$this->input->post("hsn_code"),
 						'status'=>$status,
 						'user_id'=>$_SESSION['auth_user_id'],
 						];

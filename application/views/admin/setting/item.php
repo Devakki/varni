@@ -23,6 +23,12 @@
                                   <input placeholder="ITEM NAME" type="text" name="name" title="Item Name" required="" class="form-control" autocomplete="off" value="<?php echo (($method=="edit")?$result->item_name:"");  ?>">
                               </div>
                           </div>
+                          <div class="form-group row">
+                              <label for="name" class="col-3 col-form-label">HSN CODE<span class="text-danger">*</span></label>
+                              <div class="col-9">
+                                  <input placeholder="HSN CODE" type="text" name="hsn_code" title="HSN CODE" required="" class="form-control" autocomplete="off" value="<?php echo (($method=="edit")?$result->hsn_code:"");  ?>">
+                              </div>
+                          </div>
                         <?php if($method=="edit"): ?> 
                         <div class="form-group row">
                             <label for="status" class="col-3 col-form-label">STATUS</label>
@@ -51,6 +57,7 @@
                         <tr>
                             <th>#</th>
                             <th>ITEM NAME</th>
+                            <th>HSN CODE</th>
                             <th>ACTION</th>
                         </tr>
                         </thead>

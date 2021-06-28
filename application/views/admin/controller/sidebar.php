@@ -6,7 +6,7 @@
                     <a href="<?php echo base_url('Dashbord')?>"><i class="fi-air-play"></i><span class="badge badge-success pull-right"></span> <span> Dashbord </span></a>
                 </li>
                 <?php if($_SESSION['auth_role_id']=="1"):?>
-                <li>
+               <!-- ` <li>
                     <a href="javascript: void(0);"><i class="mdi mdi-cloud-print"></i><span> Print </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('PrintAll/general_lot')?>">General Lot</a></li>
@@ -20,16 +20,16 @@
                         <li><a href="<?php echo base_url('PrintAll/embroidery')?>">Embroidery</a></li>
                         <li><a href="<?php echo base_url('PrintAll/stock')?>">Stock</a></li>
                     </ul>
-                </li>
+                </li>` -->
                 <?php endif;?>
                 <?php if($_SESSION['auth_role_id']=="1"):?>
-                <li>
+                <!-- <li>
                     <a href="javascript: void(0);"><i class="fa fa-area-chart"></i><span>Manage</span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('Manage/lot')?>">Lot</a></li>
                         <li><a href="<?php echo base_url('Manage/')?>">Lot Status</a></li>
                     </ul>
-                </li>
+                </li> -->
                 <?php endif;?>
                 <?php if($_SESSION['auth_role_id']=="1"):?>
                 <li>
@@ -51,7 +51,7 @@
                         <li><a href="<?php echo base_url('Stock/index')?>">View</a></li>
                     </ul>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="javascript: void(0);"><i class="fa fa-cut"></i><span> Cut </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('Cut/get_addfrm')?>">Create</a></li>
@@ -119,7 +119,7 @@
                 </li>
                 <li>
                     <a href="<?php echo base_url('LogActivity')?>"><i class="fa fa-sort-amount-desc"></i><span class="badge badge-success pull-right"></span> <span> User's Activity </span></a>
-                </li>
+                </li> -->
                 <?php endif;?>
             </ul>
         </div>
