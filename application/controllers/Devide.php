@@ -24,7 +24,7 @@ class  Devide extends CI_Controller {
     {
     	$this->General_model->auth_check();
 		$data['page_title']="Devide";
-		$data['lot_no'] =$this->db->query("SELECT `lot_no` FROM `cut` WHERE `use_for`='1' and `devide_status`='1' ORDER BY `cut`.`lot_no` DESC")->result();
+		$data['party']=$this->General_model->get_data('party','status','*','1');
 		$data['patla'] = $this->General_model->get_data('patla','status','patla_name,patla_id','1');
 		$this->load->view('admin/controller/header');
 		$this->load->view('admin/controller/sidebar');

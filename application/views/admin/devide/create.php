@@ -22,19 +22,28 @@
                 <div class="card-box">
                     <h4 class="m-t-0 header-title text-center">Add Devide</h4><br>
                     <form action="<?php echo base_url('Devide/create');?>" method="post"  class="form-horizontal" >
-                        <div class="row">                          
-                          <div class="col-md-3">
+                        <div class="row">         
+                            <div class="col-md-4">
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">LOT NO<span class="text-danger">*</span></label>
+                                  <label for="name" class="col-4 col-form-label">PARTY<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <select name="lot_no" required class="xLot_No" data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                      <select name="party" id="party" class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
                                         <option value="0">None</option>
-                                        <?php foreach ($lot_no as $key => $value): ?>
-                                            <option value="<?php echo $value->lot_no; ?>"><?php echo LOT.$value->lot_no; ?></option>
+                                        <?php foreach ($party as $key => $value): ?>
+                                            <option value="<?php echo $value->party_id; ?>"><?php echo $value->party_name; ?></option>
                                         <?php endforeach; ?>
                                       </select>
                                   </div>
                               </div>
+                              <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">Challan<span class="text-danger">*</span></label>
+                                  <div class="col-8">
+                                      <select name="challan" class="xChallan" id="challan">
+                                      </select>
+                                  </div>
+                              </div>
+                          </div>                 
+                          <div class="col-md-4">
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">DATE<span class="text-danger">*</span></label>
                                   <div class="col-8">
@@ -42,28 +51,8 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col-md-3">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">VAHICLE</label>
-                                  <div class="col-8">
-                                      <input placeholder="VAHICLE" type="text" name="vahicle"  class="form-control" autocomplete="off">
-                                  </div>
-                              </div>
-                              <div class="form-group row">
-                                  <label for="lot_no" class="col-4 col-form-label">VAHICLE NO</label>
-                                  <div class="col-8">
-                                      <input placeholder="VAHICLE NO" type="text" name="vahicle_no"  class="form-control" autocomplete="off">
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-md-3">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">ADDRESS<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <textarea placeholder="ADDRESS" name="address" class="form-control" required></textarea>
-                                  </div>
-                              </div>
-                          </div>
+                        
+
                           <div class="col-md-3">
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">TOTAL PCS<span class="text-danger">*</span></label>
@@ -129,6 +118,28 @@ $(document).ready(function() {
     $('body').on('keyup','.xPcs', function(e){
           $('.xCTotal_pcs').val($(this).val()); 
     });
+    $('body').on('change','.xParty', function(e){
+        var id = $(this).val(); 
+        $('#tableBody').empty();      
+        $('#tableBody').html(tablebody);
+        $('.xItem').empty();
+        $(this).focus();
+        $("select").select2();
+        $.ajax({                                            
+          url:"<?php echo base_url('cut/get_item/') ?>"+id+"",
+          type: "POST",
+          success: function(result){
+            var result  = JSON.parse(result);                            
+            if(result.status=="success"){
+              $('.xItem').append('<option></option>');
+              $.each(result.item,function(key, value)
+              {               
+                $('.xItem').append('<option value=' + value[0] + '>' + value[1] + '</option>');
+              });
+            }
+          }
+        });
+    })
     $('body').on('change','.xLot_No', function(e){
         var lot_no=$(this).val();
         $.ajax({                                            

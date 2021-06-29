@@ -50,9 +50,9 @@
                                   </div>
                               </div>
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">ITEM<span class="text-danger">*</span></label>
+                                  <label for="name" class="col-4 col-form-label">Challan<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <select name="item" class="xItem" id="item">
+                                      <select name="Challan" class="xChallan" id="challan">
                                       </select>
                                   </div>
                               </div>
