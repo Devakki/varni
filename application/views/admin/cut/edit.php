@@ -63,14 +63,7 @@
                                       <input type="hidden" name="cut_id" value="<?php echo $cut->id_cut; ?>">
                                   </div>
                               </div>
-                              <div class="form-group row">
-                                  <label for="lot_no" class="col-4 col-form-label">USE FOR<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <select name="use_for" data-parsley-min="1" data-parsley-min-message="Select AtList One">
-                                        <option value="<?php echo $cut->use_for; ?>"><?php echo (($cut->use_for=="1")?"DEVIDE":(($cut->use_for=="2")?"EM DEVIDE":"GHADI")); ?> </option>
-                                      </select>
-                                  </div>
-                              </div>
+                              
                           </div>
                       </div>
                       <div class="row m-t-50">
@@ -81,11 +74,7 @@
                                       <tr>
                                         <th scope="col" width="15%">CHALLAN</th>
                                         <th scope="col">PURCHASE MTR</th>
-                                        <th scope="col">BALA</th>
-                                        <th scope="col">PURCHASE VAL</th>
                                         <th scope="col">PCS</th>
-                                        <th scope="col">MTR / PCS</th>
-                                        <th scope="col">CUT MTR</th>
                                         <th scope="col">FENT</th>
                                         <th scope="col"></th>
                                       </tr>
@@ -101,23 +90,13 @@
                                         <input type="number" name="p_mtr[]" class="form-control sPMeter" step="any" placeholder="PURCHASE MTR" required readonly value="<?php echo $value->p_mtr;?>">
                                         <input type="hidden" name="cutlot_id[]" value="<?php echo $value->cutlot_id;?>"  >
                                       </td>
-                                      <td>
-                                        <input type="number" name="bala_no[]" class="form-control sbala" step="any" placeholder="BALA"  required readonly  value="<?php echo $value->t_bala;?>">
-                                      </td>
-                                      <td>
-                                        <input type="number" name="pur_val[]" class="form-control sVlaue" step="any" placeholder="PURCHASE VAL" required readonly value="<?php echo $value->p_val;?>">
-                                      </td>
+                                      
                                       <td>
                                         <input type="number" step="any" name="pcs[]" class="form-control sPcs" placeholder="PCS" required value="<?php echo $value->pcs;?>" >
                                       </td>
+                                      
                                       <td>
-                                        <input type="number" step="any" name="mtr_pcs[]" class="form-control sMtr_Pcs"  placeholder="MTR / PCS"  required  value="<?php echo $value->mtr_pr_pcs;?>">
-                                      </td>
-                                      <td>
-                                        <input type="number" step="any" name="cut_mtr[]" class="form-control lr_no sCut_Mtr"  placeholder="CUT MTR" required readonly value="<?php echo $value->cut_mtr;?>">
-                                      </td>
-                                      <td>
-                                        <input type="number" step="any" name="fent[]" class="form-control sFent"  placeholder="FENT" required readonly value="<?php echo $value->fent;?>"  data-parsley-min="0" data-parsley-min-message="Min Value is 0" >
+                                        <input type="number" step="any" name="fent[]" class="form-control sFent"  placeholder="FENT" required  value="<?php echo $value->fent;?>"  data-parsley-min="0" data-parsley-min-message="Min Value is 0" >
                                       </td>
                                       <td></td>
                                     </tr>
@@ -133,21 +112,11 @@
                                       <td>
                                         <input type="number" name="p_mtr[]" class="form-control sPMeter" step="any" placeholder="PURCHASE MTR" required readonly >
                                       </td>
-                                      <td>
-                                        <input type="number" name="bala_no[]" class="form-control sbala" step="any" placeholder="BALA" required readonly >
-                                      </td>
-                                      <td>
-                                        <input type="number" name="pur_val[]" class="form-control sVlaue" step="any" placeholder="PURCHASE VAL" required readonly>
-                                      </td>
+                                     
                                       <td>
                                         <input type="number" step="any" name="pcs[]" class="form-control sPcs" placeholder="PCS" required >
                                       </td>
-                                      <td>
-                                        <input type="number" step="any" name="mtr_pcs[]" class="form-control sMtr_Pcs"  placeholder="MTR / PCS"  required >
-                                      </td>
-                                      <td>
-                                        <input type="number" step="any" name="cut_mtr[]" class="form-control lr_no sCut_Mtr"  placeholder="CUT MTR" required readonly>
-                                      </td>
+                                    
                                       <td>
                                         <input type="number" step="any" name="fent[]" class="form-control sFent"  placeholder="FENT" required readonly  data-parsley-min="0" data-parsley-min-message="Min Value is 0" >
                                       </td>
@@ -166,27 +135,9 @@
                                 </table>
                               </div>
                           </div>
-                          <div class="col-md-4">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">METER VAL</label>
-                                  <div class="col-8">
-                                      <input placeholder="METER VAL" type="number" step="any" name="tmtr_val" required="" class="form-control xMeter_Value" readonly autocomplete="off" value="<?php echo $cut->mtr_val;?>" >
-                                  </div>
-                              </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">PCS VAL</label>
-                                  <div class="col-8">
-                                      <input placeholder="PCS VAL"  type="number" step="any" name="tpcs_val" class="form-control xGPcs_value " required readonly autocomplete="off" value="<?php echo $cut->pcs_val;?>">
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="offset-md-4 col-md-4">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">TOTAL BALA</label>
-                                  <div class="col-8">
-                                      <input placeholder="TOTAL BALA" type="number" name="t_bala" required="" class="form-control xT_Bala" readonly autocomplete="off" value="<?php echo $cut->t_bala;?>" >
-                                  </div>
-                              </div>
+                          
+                          <div class="offset-md-8 col-md-4">
+                             
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">TOTAL P MTR</label>
                                   <div class="col-8">
@@ -200,15 +151,9 @@
                                   </div>
                               </div>
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">CUTTING MTR</label>
-                                  <div class="col-8">
-                                      <input placeholder="CUTTING MTR" type="number" step="any" name="tcuting_mtr" required readonly class="form-control xCut_Mtr" autocomplete="off" value="<?php echo $cut->cut_mtr;?>" >
-                                  </div>
-                              </div>
-                              <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">TOTAL FENT</label>
                                   <div class="col-8">
-                                      <input placeholder="TOTAL FENT" type="number" step="any" name="t_fent" required="" class="form-control xTemp_Meter" readonly autocomplete="off" value="<?php echo $cut->total_fent;?>" >
+                                      <input placeholder="TOTAL FENT" type="number" step="any" name="t_fent" required="" class="form-control xTemp_Meter"  autocomplete="off" value="<?php echo $cut->total_fent;?>" >
                                   </div>
                               </div>
                           </div>
@@ -278,17 +223,12 @@ $(document).ready(function() {
 function calculate_obj($tr){
     var mtr=parseFloat($tr.find('.sMtr_Pcs').val());
     var pcs=parseInt($tr.find('.sPcs').val());
-    var cut_mtr=pcs*mtr;
-    $tr.find('.sCut_Mtr').val(cut_mtr.toFixed(2));
-    var sPMeter =parseFloat($tr.find('.sPMeter').val());
-    $tr.find('.sFent').val((sPMeter-cut_mtr).toFixed(2));
 }
 function calculate_meter(){
     var sVlaue = 0;
     $('.sVlaue').each(function(){
         sVlaue += parseFloat($(this).val());         
     });
-    $('.xMeter_Value').val(sVlaue.toFixed(2));
     var sPMeter=0;
     $('.sPMeter').each(function(){
         sPMeter += parseFloat($(this).val());        
@@ -299,16 +239,6 @@ function calculate_meter(){
         sPcs  += parseFloat($(this).val());        
     });
     $('.xTotal_pcs').val(sPcs);
-    var sbala=0;
-    $('.sbala').each(function(){
-        sbala  += parseFloat($(this).val());         
-    });
-    $('.xT_Bala').val(sbala);
-    var sCut_Mtr  =0;
-    $('.sCut_Mtr ').each(function(){
-        sCut_Mtr   += parseFloat($(this).val());         
-    });
-    $('.xCut_Mtr').val(sCut_Mtr.toFixed(2));
     var sFent  =0;
     $('.sFent ').each(function(){
         sFent   += parseFloat($(this).val());        

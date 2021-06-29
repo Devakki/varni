@@ -24,15 +24,10 @@
                            <th>DATE</th>
                            <th>NAME</th>
                            <th>PARTY</th>
-                           <th>USE</th>
                            <th>ITEM</th>
                            <th>T PCS</th>
                            <th>T MTR</th>
-                           <th>CUT MTR</th>
                            <th>FENT</th>
-                           <?php if($_SESSION['auth_role_id']=="1"): ?>
-                           <th>ADD BY</th>
-                           <?php endif;?>
                            <th>ACTION</th>
                        </tr>
                        </thead>
@@ -64,16 +59,13 @@
                         { "data": "date"},
                         { "data": "name" },
                         { "data": "party_name" },
-                        { "data": "use_for" },
                         { "data": "item_name" },
                         { "data": "total_pcs" },
                         { "data": "purchase_mtr" },
-                        { "data": "cut_mtr" },
                         { "data": "total_fent"},
-                        { "data": "user_name" },
                         { "data": "button"},
                     ],
-            columnDefs: [{ "targets": [13],"orderable": false}],
+            columnDefs: [{ "targets": [10],"orderable": false}],
             buttons: ['print','copy', 'excel', 'colvis'],
             lengthChange: false,
             dom: 'Blfrtip'
@@ -99,7 +91,6 @@
                         { "data": "item_name" },
                         { "data": "total_pcs" },
                         { "data": "purchase_mtr" },
-                        { "data": "cut_mtr" },
                         { "data": "total_fent"},
                         { "data": "button"},
                     ],

@@ -31,7 +31,7 @@
                     <h2 class="m-t-0 text-center"><?php echo FULL_NAME; ?></h2>
                     <h4 class="m-t-0 header-title text-center"><?php echo ADDRESS1; ?></h4>
                     <div class="row m-t-50">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                           <table class="table table-borderless">
                               <tr>
                                   <th style="width:30%">M/s</th>
@@ -47,7 +47,7 @@
                               </tr> 
                           </table>
                         </div>
-                        <div class="offset-md-4 col-md-3">
+                        <div class="col-md-4">
                             <table class="table table-borderless">
                               <tr>
                                 <th style="width:50%">Challan No:</th>
@@ -63,6 +63,22 @@
                               </tr> 
                             </table>
                         </div>
+                        <div class="col-md-4">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th style="width:50%">Total Meter</th>
+                                    <td><?php echo $cut->purchase_mtr; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Total Pcs</th>
+                                    <td><?php echo $cut->total_pcs; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Total Fent</th>
+                                    <td><?php echo $cut->total_fent; ?></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 divscroll">
@@ -73,8 +89,6 @@
                                     <th>Challan</th>
                                     <th>Mtr</th>
                                     <th>Pcs</th>
-                                    <th>Mtr/pcs</th>
-                                    <th>Cut Mtr</th>
                                     <th>Fent</th>
                                   </tr>
                                 </thead>
@@ -86,8 +100,6 @@
                                        <td><?php echo $rw->challan_no; ?></td>
                                        <td><?php echo number_format($rw->p_mtr,2); ?></td>
                                        <td><?php echo $rw->pcs; ?></td>
-                                       <td><?php echo number_format($rw->mtr_pr_pcs,2); ?></td>
-                                       <td><?php echo number_format($rw->cut_mtr,2);?></td>
                                        <td><?php echo number_format($rw->fent,2);?></td>
                                     </tr>
                                    <?php $no++; } ?>
@@ -96,38 +108,8 @@
                         </div>
                    </div>
                    <div class="row m-t-20">
-                        <div class="col-md-4">
-                          <table class="table">
-                              <tr>
-                                  <th style="width:50%">Meter Value</th>
-                                  <td> <?php echo $cut->mtr_val; ?></td>
-                              </tr>
-                              <tr>
-                                  <th>Pcs Value</th>
-                                  <td><?php echo $cut->pcs_val;?></td>
-                              </tr> 
-                          </table>
-                        </div>
-                        <div class="offset-md-4 col-md-4">
-                            <table class="table">
-                                <tr>
-                                    <th style="width:50%">Total Meter</th>
-                                    <td><?php echo $cut->purchase_mtr; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Total Pcs</th>
-                                    <td><?php echo $cut->total_pcs; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Cut Mtr</th>
-                                    <td><?php echo $cut->cut_mtr; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Total Fent</th>
-                                    <td><?php echo $cut->total_fent; ?></td>
-                                </tr>
-                            </table>
-                        </div>
+                        
+                       
                    </div>
                </div>
            </div>

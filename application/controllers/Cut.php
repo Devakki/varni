@@ -75,24 +75,14 @@ class  Cut extends CI_Controller {
             $this->LogModel->simplelog($msg);
             $i=0;
             $check_lot=$this->db->query("SELECT * FROM `balance` WHERE `lot_no`='".$lot_no."'")->num_rows();
-            if($check_lot>0){
-                $this->General_model->delete('balance','lot_no',$lot_no);
-            }
-            $balance=['lot_no'=>$lot_no,
-                        'cut_meter'=>$tmtr_val,
-                        'cut_pcs'=>$pcs_value];
-            $this->db->insert('balance',$balance);
+           
             foreach($this->input->post('schallan_no') as $lt)
             {
                 $challan=$this->input->post('schallan_no')[$i];
                 $p_mtr=$this->input->post('p_mtr')[$i];
-                $bala=$this->input->post('bala_no')[$i];    
-                $p_val=$this->input->post('pur_val')[$i];
                 $pcs=$this->input->post('pcs')[$i];
-                $mtr_pcs=$this->input->post('mtr_pcs')[$i];
-                $cutmtr=$this->input->post('cut_mtr')[$i];
                 $fent=$this->input->post('fent')[$i];
-                if(isset($challan) && !empty($challan) && isset($cut) && !empty($cut) && isset($pcs) && !empty($pcs) && isset($mtr_pcs) && !empty($mtr_pcs)){
+                if(isset($challan) && !empty($challan) && isset($cut) && !empty($cut) && isset($pcs) && !empty($pcs)){
                     $cut_lot=["cut_id"=>$cut,
                                 'date'=>$date,                              
                                 "lot_no"=>$lot_no,
@@ -100,12 +90,8 @@ class  Cut extends CI_Controller {
                                 "party_id"=>$party_id,
                                 "item_id"=>$item_id,
                                 "p_mtr"=>$p_mtr,
-                                "p_val"=>$p_val,
                                 'pcs'=>$pcs,
-                                "mtr_pr_pcs"=>$mtr_pcs,
-                                "cut_mtr"=>$cutmtr,
                                 "fent"=>$fent,
-                                "t_bala"=>$bala,
                                 "created_at"=>date("Y-m-d h:i:s")];
                     $where =['party_id'=>$party_id,'item_id'=>$item_id,'challan_no'=>$challan];
                     $update=['status'=>0,'lot_no'=>$lot_no];
@@ -170,7 +156,7 @@ class  Cut extends CI_Controller {
                     $button='<a href="'.base_url('Cut/get_editfrm/').$post->id_cut.'"><button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
                         <a href="'.base_url('Cut/view_invoice/').$post->id_cut.'"><button type="button" class="btn btn-custom waves-effect btn-sm  waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>';
                 }
-                $use_for=(($post->use_for=="1")?"<span class='bg-primary text-white px-2 py-1'>DEVIDE</span>":(($post->use_for=="2")?"<span class='bg-secondary text-white px-2 py-1'>EM DEVIDE</span>":"<span class='bg-success text-white px-2 py-1'>GHADI</span>"));
+              
                 $nestedData['sr_no'] =$i;
                 $nestedData['challan_no'] =$post->challan_no;
                 $nestedData['name'] =$post->name;
@@ -180,9 +166,7 @@ class  Cut extends CI_Controller {
                 $nestedData['date'] =date('d/m/Y',strtotime($post->date));
                 $nestedData['total_pcs'] =$post->total_pcs;
                 $nestedData['purchase_mtr'] = $post->purchase_mtr;
-                $nestedData['cut_mtr'] =$post->cut_mtr;
                 $nestedData['total_fent'] = $post->total_fent;
-                $nestedData['use_for'] = $use_for;
                 $nestedData['user_name'] = strtoupper($post->user_name);
                 $nestedData['button'] =$button;
                 ;
@@ -217,57 +201,36 @@ class  Cut extends CI_Controller {
         $date = explode('/',$this->input->post('date')); 
         $date =[$date[2],$date[1],$date[0]];
         $date=implode("-", $date);
-        $t_bala=$this->input->post('t_bala');
         $tp_mtr=$this->input->post('tp_mtr');
-        $t_pcs=$this->input->post('t_pcs');
-        $tcuting_mtr=$this->input->post('tcuting_mtr');     
-        $t_fent=$this->input->post('t_fent');           
-        $tmtr_val=$this->input->post('tmtr_val');
-        $pcs_value=$this->input->post('tpcs_val');
-        $use_for=$this->input->post('use_for');
-        if(isset($name) && !empty($name) &&  isset($date) && !empty($date) && isset($t_bala) && !empty($t_bala)  && isset($tp_mtr) && !empty($tp_mtr) && isset($t_pcs) && !empty($t_pcs) && isset($tcuting_mtr) && !empty($tcuting_mtr) && isset($tmtr_val) && !empty($tmtr_val) && isset($cut_id) && !empty($cut_id)  && isset($use_for) && !empty($use_for)){
+        $t_pcs=$this->input->post('t_pcs');     
+        $t_fent=$this->input->post('t_fent');   
+        if(isset($name) && !empty($name) &&  isset($date) && !empty($date)  && isset($tp_mtr) && !empty($tp_mtr) && isset($t_pcs) && !empty($t_pcs)){
             $cut=$this->General_model->get_row('cut','id_cut',$cut_id);
             $detail=[
                     'date'=>$date,
                     'name'=>$name,
-                    'use_for'=>$use_for,
                     'purchase_mtr'=>$tp_mtr,
                     'total_pcs'=>$t_pcs,
-                    't_bala'=>$t_bala,
-                    'cut_mtr'=>$tcuting_mtr,
-                    'total_fent'=>$t_fent,
-                    'mtr_val'=>$tmtr_val,
-                    'user_id'=>$_SESSION['auth_user_id'],
-                    'pcs_val'=>$pcs_value ];
+                    'total_fent'=>$t_fent ];
             $this->General_model->update('cut',$detail,'id_cut',$cut_id);
             $msg="Cut Update Lotno  ".$cut->lot_no;
             $this->LogModel->simplelog($msg);
-            $balance=['cut_meter'=>$tmtr_val,
-                            'cut_pcs'=>$pcs_value];
-            $this->db->update('balance',$balance,'lot_no',$cut->lot_no);
+           
             $i=0;
             foreach($this->input->post('schallan_no') as $lt){
                     $challan=$this->input->post('schallan_no')[$i];
                     $p_mtr=$this->input->post('p_mtr')[$i];
-                    $bala=$this->input->post('bala_no')[$i];    
-                    $p_val=$this->input->post('pur_val')[$i];
                     $pcs=$this->input->post('pcs')[$i];
-                    $mtr_pcs=$this->input->post('mtr_pcs')[$i];
-                    $cutmtr=$this->input->post('cut_mtr')[$i];
                     $fent=$this->input->post('fent')[$i];
                     $cutlot_id=$this->input->post('cutlot_id')[$i];
-                    if( isset($cutlot_id) && !empty($cutlot_id) &&($challan) && !empty($challan) && isset($cut->id_cut) && !empty($cut->id_cut) && isset($pcs) && !empty($pcs) && isset($mtr_pcs) && !empty($mtr_pcs)){
+                    if( isset($cutlot_id) && !empty($cutlot_id) &&($challan) && !empty($challan) && isset($cut->id_cut) && !empty($cut->id_cut) && isset($pcs) && !empty($pcs) ){
                         $cut_lot=[
                                     'date'=>$date,                              
                                     "p_mtr"=>$p_mtr,
-                                    "p_val"=>$p_val,
                                     'pcs'=>$pcs,
-                                    "mtr_pr_pcs"=>$mtr_pcs,
-                                    "cut_mtr"=>$cutmtr,
-                                    "fent"=>$fent,
-                                    "t_bala"=>$bala ];
+                                    "fent"=>$fent];
                         $this->General_model->update('cut_lot',$cut_lot,'cutlot_id',$cutlot_id);
-                    }elseif (isset($challan) && !empty($challan) && isset($cut->id_cut) && !empty($cut->id_cut) && isset($pcs) && !empty($pcs) && isset($mtr_pcs) && !empty($mtr_pcs)) {
+                    }elseif (isset($challan) && !empty($challan) && isset($cut->id_cut) && !empty($cut->id_cut) && isset($pcs) && !empty($pcs)) {
                         $cut_lot=["cut_id"=>$cut->id_cut,
                                     'date'=>$date,                              
                                     "lot_no"=>$cut->lot_no,
@@ -275,12 +238,8 @@ class  Cut extends CI_Controller {
                                     "party_id"=>$cut->party_id,
                                     "item_id"=>$cut->item_id,
                                     "p_mtr"=>$p_mtr,
-                                    "p_val"=>$p_val,
                                     'pcs'=>$pcs,
-                                    "mtr_pr_pcs"=>$mtr_pcs,
-                                    "cut_mtr"=>$cutmtr,
                                     "fent"=>$fent,
-                                    "t_bala"=>$bala,
                                     "created_at"=>date("Y-m-d h:i:s")];
                         $where =['party_id'=>$cut->party_id,'item_id'=>$cut->item_id,'challan_no'=>$challan];
                         $update=['status'=>0,'lot_no'=>$cut->lot_no];
