@@ -51,14 +51,14 @@
                         <li><a href="<?php echo base_url('Stock/index')?>">View</a></li>
                     </ul>
                 </li>
-                <!-- <li>
+                <li>
                     <a href="javascript: void(0);"><i class="fa fa-cut"></i><span> Cut </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('Cut/get_addfrm')?>">Create</a></li>
                         <li><a href="<?php echo base_url('Cut/index')?>">View</a></li>
                     </ul>
                 </li>
-                <li>
+               <!--  <li>
                     <a href="javascript: void(0);"><i class="fi-grid "></i><span> Devide </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('Devide/get_addfrm')?>">Create</a></li>

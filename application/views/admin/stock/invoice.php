@@ -10,6 +10,7 @@
             padding: 7px 8px;
           }
 </style>
+
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -66,11 +67,9 @@
                                 <thead>
                                     <tr>
                                       <th>Sr No</th>
-                                      <th>Bale No</th>
-                                      <th>Taka</th>
-                                      <th>Meter</th>
                                       <th>Lr No</th>
-                                      <th>Date</th>
+                                      <th>Bale No</th>
+                                      <th>Meter</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -78,11 +77,10 @@
                                     foreach($stockdetail as $rw){?>
                                     <tr>
                                        <td><?php echo $no++; ?></td>
-                                       <td><?php echo $rw->bala_no; ?></td>
-                                       <td><?php echo $rw->taka; ?></td>
-                                       <td><?php echo  number_format($rw->mtr,2); ?></td>
+                                       
                                        <td><?php echo $rw->lr_no; ?></td>
-                                       <td><?php echo date('d/m/Y', strtotime($rw->lr_date));?></td>
+                                       <td><?php echo $rw->bala_no; ?></td>
+                                       <td><?php echo  number_format($rw->mtr,2); ?></td>
                                     </tr>
                                    <?php } ?>
                                 </tbody>
@@ -92,32 +90,14 @@
                    <div class="row m-t-20">
                         <div class="col-md-4">
                           <table class="table">
-                              <tr>
-                                  <th style="width:50%">Total Taka :</th>
-                                  <td> <?php echo $stock->t_bala; ?></td>
-                              </tr>
+                             
                               <tr>
                                   <th>Total Meter</th>
                                   <td><?php echo number_format($stock->total_meter,2);?></td>
                               </tr> 
                           </table>
                         </div>
-                        <div class="offset-md-4 col-md-4">
-                            <table class="table">
-                                <tr>
-                                  <th style="width:50%">Subtotal:</th>
-                                  <td><i class="fa fa-inr"></i> <?php echo $stock->sub_total; ?></td>
-                                </tr>
-                                <tr>
-                                  <th>Tax (<?php echo TAX; ?>%)</th>
-                                  <td><i class="fa fa-inr"></i> <?php echo $stock->tax; ?></td>
-                                </tr>
-                                <tr>
-                                  <th>Total:</th>
-                                  <td><i class="fa fa-inr"></i> <?php echo number_format($stock->g_total,2); ?></td>
-                                </tr>
-                            </table>
-                        </div>
+                        
                    </div>
                </div>
            </div>

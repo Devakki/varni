@@ -4,6 +4,7 @@
 
   }
  
+
 </style>
 <div class="content">
     <div class="container-fluid">
@@ -69,14 +70,9 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
+                                
                                 <div class="form-group row">
-                                    <label for="name" class="col-4 col-form-label">MERCHANT CODE<span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <input placeholder="MERCHANT CODE" type="text" name="marchant_no" required="" class="form-control" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="col-4 col-form-label">CHALLON NO<span class="text-danger">*</span></label>
+                                    <label for="name" class="col-4 col-form-label">DO NO<span class="text-danger">*</span></label>
                                     <div class="col-8">
                                         <input placeholder="CHALLON NO" type="text" name="challan_no" required="" id="challan_no" class="form-control" autocomplete="off">
                                         <input type="hidden" id="exist">
@@ -90,37 +86,31 @@
                                   <table class="table" style="min-width: 1080px;">
                                     <thead>
                                         <tr>
+                                        <th scope="col">LR NO</th>
                                           <th scope="col">BALA NO</th>
-                                          <th scope="col">TAKA</th>
                                           <th scope="col">MTR</th>
-                                          <th scope="col">LR NO</th>
-                                          <th scope="col">DATE</th>
                                           <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody id="myTable">
                                         <tr id="xAppendNode">
                                           <td>
-                                            <input type="number" name="bala_no[]" class="form-control bala_no"    placeholder="BALA NO" required >
-                                          </td>
-                                          <td>
-                                            <input type="number" name="taka[]" class="form-control taka" step="any" placeholder="TAKA" required >
-                                          </td>
-                                          <td>
-                                            <input type="number" name="mtr[]" class="form-control mtr" step="any" placeholder="MTR" required >
-                                          </td>
-                                          <td>
                                             <input type="text" name="lr_no[]" class="form-control lr_no"             placeholder="LR NO" required >
                                           </td>
                                           <td>
-                                            <input type="text" name="lr_date[]" class="form-control datepicker-autoclose lr_date"  placeholder="dd/mm/yy" value="<?php echo date('d/m/Y');?>" required >
+                                            <input type="number" name="bala_no[]" class="form-control bala_no"    placeholder="BALA NO" required >
                                           </td>
+                                          
+                                          <td>
+                                            <input type="number" name="mtr[]" class="form-control mtr" step="any" placeholder="MTR" required >
+                                          </td>
+                                          
                                           <td>
                                             <button type="button" class="btn btn-icon waves-effect waves-light btn-danger btn-sm btn-remove "><i class=" fa fa-minus"></i></button>
                                           </td>
                                         </tr>
                                         <tr>
-                                          <td colspan="5">
+                                          <td colspan="3">
                                           </td>
                                           <td>
                                             <button type="button" class="btn waves-effect waves-light btn-secondary btn-add btn-sm"> <i class="fa fa-plus"></i> </button>
@@ -138,39 +128,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="name" class="col-4 col-form-label">TOTAL TAKA</label>
-                                    <div class="col-8">
-                                        <input placeholder="TOTAL TAKA"  type="number" step="any" name="t_taka" required="" class="form-control xTotaltaka" readonly autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <label for="name" class="col-4 col-form-label">TOTAL MTR</label>
                                     <div class="col-8">
                                         <input placeholder="TOTAL MTR" type="number" step="any" name="t_mtr" required="" class="form-control xTotalmeter"  readonly autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="col-4 col-form-label">MTR VALUE</label>
-                                    <div class="col-8">
-                                        <input placeholder="MTR VALUE" type="number" step="any" name="mtr_value" required readonly class="form-control xMetervalue" autocomplete="off" >
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="col-4 col-form-label">SUB TOTAL</label>
-                                    <div class="col-8">
-                                        <input placeholder="SUB TOTAL" type="number" step="any" name="sub_total" required="" class="form-control xSub_Total" readonly autocomplete="off" >
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="col-4 col-form-label">TAX (<?php echo TAX;?>%)</label>
-                                    <div class="col-8">
-                                        <input placeholder="TAX"  type="number" step="any" name="tax" required="" class="form-control xTax" readonly  autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="col-4 col-form-label">GRAND TOTAL</label>
-                                    <div class="col-8">
-                                        <input placeholder="GRAND TOTAL" type="number" step="any" name="g_total" required="" class="form-control xGrand_Total" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -192,14 +152,9 @@ function calculate(){
     rowCount=rowCount-1;
     $('.xTotalbala').val(rowCount);
     var sub_meter = 0;
-    var sub_taka = 0;
     $('.mtr').each(function(i, obj) {
       sub_meter += ($(obj).val() * 1);
     });
-    $('.taka').each(function(i, obj) {
-      sub_taka += ($(obj).val() * 1);
-    });
-    $('.xTotaltaka').val(sub_taka.toFixed(2));
     $('.xTotalmeter').val(sub_meter.toFixed(2));
 }
 function validateForm(){
@@ -230,14 +185,10 @@ $(document).ready(function() {
       tr.before('<tr id="tr'+i+'">'+appendnode+'</tr>');
       let bala_no=parseFloat($('#tr'+i).prev().find('.bala_no').val());
       $('#tr'+i).find('.bala_no').val(bala_no+1);
-      let taka=$('#tr'+i).prev().find('.taka').val();
-      $('#tr'+i).find('.taka').val(taka);
       let mtr=$('#tr'+i).prev().find('.mtr').val();
       $('#tr'+i).find('.mtr').val(mtr);
       let lr_no=$('#tr'+i).prev().find('.lr_no').val();
       $('#tr'+i).find('.lr_no').val(lr_no);
-      let lr_date=$('#tr'+i).prev().find('.lr_date').val();
-      $('#tr'+i).find('.lr_date').val(lr_date);
       $('.datepicker-autoclose').datepicker({
           autoclose: true,
           todayHighlight: true,
@@ -261,28 +212,11 @@ $(document).ready(function() {
     $('body').on('keyup','.bala_no', function(){
         calculate();
     });
-    $('body').on('keyup','.taka', function(){
-        calculate();
-    });
     $('body').on('keyup','.mtr', function(){
         calculate();
     });
     $('body').on('keyup','.lr_no', function(){
         calculate();
-    });
-    $('body').on('keyup','.lr_date', function(){
-        calculate();
-    });
-    $('body').on('keyup','.xGrand_Total', function(e){
-      calculate();
-      var val = $(this).val();
-      var total_meter = $('.xTotalmeter').val();
-      var tax = val - (val * (100/105));
-      var subtotal = val - tax;
-      var meter_value = subtotal / total_meter;
-      $('.xTax').val(tax.toFixed(2));
-      $('.xSub_Total').val(subtotal.toFixed(2));
-      $('.xMetervalue').val(meter_value.toFixed(2));
     });
     $('#challan_no').keyup(function() {
         let value=$(this).val();

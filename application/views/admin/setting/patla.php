@@ -23,6 +23,18 @@
                                   <input placeholder="PATLA NAME" type="text" name="name" required="" class="form-control" autocomplete="off" value="<?php echo (($method=="edit")?$result->patla_name:"");  ?>">
                               </div>
                           </div>
+                          <div class="form-group row">
+                              <label for="name" class="col-3 col-form-label">ADDRESS<span class="text-danger">*</span></label>
+                              <div class="col-9">
+                                  <input placeholder="ADDRESS" type="text" name="address" required="" class="form-control" autocomplete="off" value="<?php echo (($method=="edit")?$result->address:"");  ?>">
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                              <label for="name" class="col-3 col-form-label">MOBILE NO<span class="text-danger">*</span></label>
+                              <div class="col-9">
+                                  <input placeholder="MOBILE NO" type="text" name="mobile_no" required="" class="form-control" autocomplete="off" value="<?php echo (($method=="edit")?$result->mobile_no:"");  ?>">
+                              </div>
+                          </div>
                         <?php if($method=="edit"): ?> 
                         <div class="form-group row">
                             <label for="status" class="col-3 col-form-label">STATUS</label>
@@ -51,6 +63,8 @@
                         <tr>
                             <th>#</th>
                             <th>PATLA NAME</th>
+                            <th>ADDRESS</th>
+                            <th>MOBILE NO</th>
                             <th>ACTION</th>
                         </tr>
                         </thead>
@@ -78,6 +92,8 @@
             columns: [      
                         { "data": "sr_no" },
                         { "data": "name"},
+                        { "data": "address"},
+                        { "data": "mobile_no"},
                         { "data": "button" },
                     ],
             columnDefs: [{ "targets": [2],"orderable": false}],

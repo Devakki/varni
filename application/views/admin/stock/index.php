@@ -12,6 +12,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
            <div class="col-12">
                <div class="card-box table-responsive">
@@ -23,9 +24,7 @@
                            <th>PARTY</th>
                            <th>ITEM</th>
                            <th>CHALLAN NO</th>
-                           <th>MTR VAL</th>
                            <th>T MTR</th>
-                           <th>G TOTAL</th>
                            <th>TRANSPORT</th>
                            <?php if($_SESSION['auth_role_id']=="1"): ?>
                            <th>ADD BY</th>
@@ -44,8 +43,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         //Buttons examples
-        <?php if($_SESSION['auth_role_id']=="1"): ?>
-        var table = $('#datatable-buttons').DataTable({
+         var table = $('#datatable-buttons').DataTable({
             processing: true,
             serverSide: true,
             order: [],
@@ -60,46 +58,17 @@
                         { "data": "party_name" },
                         { "data": "item_name" },
                         { "data": "challan_no" },
-                        { "data": "meter_value" },
                         { "data": "total_meter" },
-                        { "data": "g_total" },
                         { "data": "transport_name" },
                         { "data": "user_name" },
                         { "data": "button" },
                     ],
-            columnDefs: [{ "targets": [10],"orderable": false}],
+            columnDefs: [{ "targets": [8],"orderable": false}],
             buttons: ['print','copy', 'excel', 'colvis'],
             lengthChange: false,
             dom: 'Blfrtip'
         });
-        <?php else :?>
-        var table = $('#datatable-buttons').DataTable({
-            processing: true,
-            serverSide: true,
-            order: [],
-            ajax: {
-                   "url": "<?php echo base_url('Stock/getLists/'); ?>",
-                   "type": "POST"
-               },
-            "order": [[0, "DESC" ]],
-            columns: [      
-                        { "data": "sr_no" },
-                        { "data": "date"},
-                        { "data": "party_name" },
-                        { "data": "item_name" },
-                        { "data": "challan_no" },
-                        { "data": "meter_value" },
-                        { "data": "total_meter" },
-                        { "data": "g_total" },
-                        { "data": "transport_name" },
-                        { "data": "button" },
-                    ],
-            columnDefs: [{ "targets": [9],"orderable": false}],
-            buttons: ['print','copy', 'excel', 'colvis'],
-            lengthChange: false,
-            dom: 'Blfrtip'
-        });
-        <?php endif; ?>
+        
         table.buttons().container()
                 .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
         $('#datatable-buttons').on('click', '[data-id=delete]', function () {                        

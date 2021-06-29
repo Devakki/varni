@@ -25,6 +25,7 @@ class  Patla extends CI_Controller {
 	}
 	public function create()
 	{
+
 		$this->General_model->auth_check();
 		$name=ucwords(trim($this->input->post("name")));
 		if(isset($name) && !empty($name)){
@@ -36,6 +37,8 @@ class  Patla extends CI_Controller {
 				$msg="Patla insert ".$name;
 				$this->LogModel->simplelog($msg);
 				$detail=['patla_name'=>$name,
+							'address'=>$this->input->post("address"),
+							'mobile_no'=>$this->input->post("mobile_no"),
 							'status'=>'1',
 							'user_id'=>$_SESSION['auth_user_id'],
 							'created_at'=>date("Y-m-d h:i:s")];
@@ -78,6 +81,8 @@ class  Patla extends CI_Controller {
 		    {
 		        $nestedData['sr_no'] =$i;
 		        $nestedData['name'] =$post->patla_name;
+		        $nestedData['address'] =$post->address;
+		        $nestedData['mobile_no'] =$post->mobile_no;
 		        $nestedData['button'] ='<a href="'.base_url('Patla/get_editfrm/').$post->patla_id .'"><button type="button" class="btn btn-custom btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>';
 		        $data[] = $nestedData;
 		        $i++;
@@ -118,6 +123,8 @@ class  Patla extends CI_Controller {
 				$msg="patla update ".$name;
 				$this->LogModel->simplelog($msg);
 	    		$detail=['patla_name'=>$name,
+						'address'=>$this->input->post("address"),
+						'mobile_no'=>$this->input->post("mobile_no"),
 	    			'user_id'=>$_SESSION['auth_user_id'],
 					'status'=>$status,
 					];

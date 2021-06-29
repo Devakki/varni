@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class  Cut extends CI_Controller {
+
     function __construct() {
         parent::__construct();
         $this->load->helper('url');
@@ -50,35 +51,24 @@ class  Cut extends CI_Controller {
         $party_id=$this->input->post('party');
         $item_id=$this->input->post('item');
         $lot_no=trim($this->input->post("lot_no"));
-        $t_bala=$this->input->post('t_bala');
         $tp_mtr=$this->input->post('tp_mtr');
-        $t_pcs=$this->input->post('t_pcs');
-        $tcuting_mtr=$this->input->post('tcuting_mtr');     
-        $t_fent=$this->input->post('t_fent');           
-        $tmtr_val=$this->input->post('tmtr_val');
-        $pcs_value=$this->input->post('tpcs_val');
-        $use_for=$this->input->post('use_for');
-        if(isset($name) && !empty($name) &&  isset($date) && !empty($date) &&  isset($party_id) && !empty($party_id) && isset($item_id) && !empty($item_id) && isset($lot_no) && !empty($lot_no) && isset($t_bala) && !empty($t_bala)  && isset($tp_mtr) && !empty($tp_mtr) && isset($t_pcs) && !empty($t_pcs) && isset($tcuting_mtr) && !empty($tcuting_mtr) && isset($tmtr_val) && !empty($tmtr_val) && isset($pcs_value) && !empty($pcs_value) && isset($use_for) && !empty($use_for)){
+        $t_pcs=$this->input->post('t_pcs');  
+        $t_fent=$this->input->post('t_fent');        
+        if(isset($name) && !empty($name) &&  isset($date) && !empty($date) &&  isset($party_id) && !empty($party_id) && isset($item_id) && !empty($item_id) && isset($lot_no) && !empty($lot_no)   && isset($tp_mtr) && !empty($tp_mtr) && isset($t_pcs) && !empty($t_pcs)){
             $challan_no=$this->CutModel->challan_no();
-            $devide_status=(($use_for=="1")?1:0);
+           
             $detail=[
                     'challan_no'=>$challan_no['challan_no'],
                     'lot_no'=>$lot_no,
                     'date'=>$date,
-                    'use_for'=>$use_for,
                     'name'=>$name,
                     'party_id'=>$party_id,
                     'item_id'=>$item_id,
                     'purchase_mtr'=>$tp_mtr,
                     'total_pcs'=>$t_pcs,
-                    't_bala'=>$t_bala,
-                    'cut_mtr'=>$tcuting_mtr,
                     'total_fent'=>$t_fent,
-                    'mtr_val'=>$tmtr_val,
-                    'pcs_val'=>$pcs_value,
                     'status'=>'1',
                     'user_id'=>$_SESSION['auth_user_id'],
-                    'devide_status'=>$devide_status,
                     'created_at'=>date("Y-m-d h:i:s")];
             $cut = $this->General_model->addid('cut',$detail);
             $msg="Cut insert id ".$cut;
@@ -409,7 +399,7 @@ class  Cut extends CI_Controller {
         $item=$this->input->post('item');
         $challan_no=$this->input->post('challan');
         if(isset($party) && !empty($party) && isset($item) && !empty($item) && isset($challan_no) && !empty($challan_no)){
-            $cut=$this->db->query("SELECT `total_meter`,`meter_value`,`t_bala` FROM `stock` WHERE `party_id`='".$party."' AND `item_id`='".$item."' AND `challan_no`='".$challan_no."' AND `status`='1'");
+            $cut=$this->db->query("SELECT `total_meter`,`t_bala` FROM `stock` WHERE `party_id`='".$party."' AND `item_id`='".$item."' AND `challan_no`='".$challan_no."' AND `status`='1'");
             $count=$cut->num_rows();
             if($count>0){
                 $query=$cut->row();
