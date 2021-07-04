@@ -66,6 +66,8 @@ class  Stock extends CI_Controller {
 					'status'=>'1',
 					'created_at'=>date("Y-m-d h:i:s")];
 				$stock = $this->General_model->addid('stock',$detail);
+				$flag = ['challan_no'=>$challan_no,'party_id'=>$party];
+				$flagadd = $this->General_model->add('flag',$flag);
 				$i=0;
 				$msg="Stock insert id ".$stock;
 				$this->LogModel->simplelog($msg);

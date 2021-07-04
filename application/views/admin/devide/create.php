@@ -23,7 +23,23 @@
                     <h4 class="m-t-0 header-title text-center">Add Devide</h4><br>
                     <form action="<?php echo base_url('Devide/create');?>" method="post"  class="form-horizontal" >
                         <div class="row">         
-                            <div class="col-md-4">
+                            <div class="col-md-8 ofset-2">
+                              <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">PATLA ACCOUNT<span class="text-danger">*</span></label>
+                                  <div class="col-8">
+                                      <select name="patla" id="patla" class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                       <?php foreach ($patla as $key => $value): ?>
+                                                      <option value="<?php echo $value->patla_id; ?>"><?php echo $value->patla_name; ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">DATE<span class="text-danger">*</span></label>
+                                  <div class="col-8">
+                                      <input placeholder="dd/mm/yy" type="text" name="date" required="" class="form-control datepicker-autoclose" autocomplete="off" value="<?php echo date('d/m/Y'); ?>">
+                                  </div>
+                              </div>
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">PARTY<span class="text-danger">*</span></label>
                                   <div class="col-8">
@@ -36,70 +52,30 @@
                                   </div>
                               </div>
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">Challan<span class="text-danger">*</span></label>
+                                  <label for="name" class="col-4 col-form-label">Item<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <select name="challan" class="xChallan" id="challan">
+                                      <select name="item" class="xItem" id="item">
                                       </select>
                                   </div>
                               </div>
-                          </div>                 
-                          <div class="col-md-4">
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">DATE<span class="text-danger">*</span></label>
+                                  <label for="name" class="col-4 col-form-label">Challan<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <input placeholder="dd/mm/yy" type="text" name="date" required="" class="form-control datepicker-autoclose" autocomplete="off" value="<?php echo date('d/m/Y'); ?>">
+                                      <select name="challan" class="sChallan" id="challan">
+                                      </select>
                                   </div>
                               </div>
-                          </div>
-                        
-
-                          <div class="col-md-3">
+                              
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">TOTAL PCS<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <input placeholder="TOTAL PCS" type="text" name="total_pcs" required="" class="form-control xtotalPcs" autocomplete="off" readonly>
+                                      <input placeholder="TOTAL PCS" type="text" name="total_pcs" required="" class="form-control xtotalPcs" autocomplete="off" >
                                   </div>
                               </div>
-                          </div>
+                          </div>                 
+                         
                       </div>
-                      <div class="row m-t-50">
-                          <div class="col-md-12">
-                              <div class="row">
-                                  <div class="offset-md-2 col-md-8" style="overflow-x: auto;">
-                                      <table class="table" id="myTable" style="min-width: 600px;">
-                                        <thead>
-                                            <tr>
-                                              <th scope="col" width="50%">CHALLAN</th>
-                                              <th scope="col">PCS</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                              <td>
-                                                <select name="patla">
-                                                  <?php foreach ($patla as $key => $value): ?>
-                                                      <option value="<?php echo $value->patla_id; ?>"><?php echo $value->patla_name; ?></option>
-                                                  <?php endforeach; ?>
-                                                </select>
-                                              </td>
-                                              <td>
-                                                <input type="number" name="pcs" class="form-control xPcs " step="any" placeholder="PCS" required>
-                                              </td>
-                                            </tr>
-                                        </tbody>
-                                      </table>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="offset-md-8 col-md-4 m-t-50">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">TOTAL PCS</label>
-                                  <div class="col-8">
-                                      <input placeholder="TOTAL PCS" type="number" name="t_pcs" required="" class="form-control xCTotal_pcs " readonly autocomplete="off" >
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                     
                       <div class="form-group text-center m-t-20 m-b-20">
                         <button class="btn btn-primary waves-effect waves-light" onclick="return validateForm()" type="submit">
                           Add
@@ -120,8 +96,6 @@ $(document).ready(function() {
     });
     $('body').on('change','.xParty', function(e){
         var id = $(this).val(); 
-        $('#tableBody').empty();      
-        $('#tableBody').html(tablebody);
         $('.xItem').empty();
         $(this).focus();
         $("select").select2();
@@ -140,7 +114,28 @@ $(document).ready(function() {
           }
         });
     })
-    $('body').on('change','.xLot_No', function(e){
+    $('body').on('change','.xItem', function(e){
+        var item=$(this).val(); 
+        $("select").select2();
+        $(this).focus();
+        var party=$(".xParty").val();
+        $.ajax({                                            
+            url:"<?php echo base_url('devide/get_challan/') ?>",
+            type: "POST",
+            data: {item: item, party: party},
+            success: function(result){
+                var result  = JSON.parse(result);                                
+                if(result.status=="success"){
+                  $('.sChallan').append('<option></option>');           
+                  $.each(result.challan_no,function(key,value)
+                  {
+                    $('.sChallan').append('<option value=' + value.challan_no + '>' + value.challan_no + '</option>');
+                  });             
+                }
+            }
+        });
+    });
+    $('body').on('change','.sChallan', function(e){
         var lot_no=$(this).val();
         $.ajax({                                            
               url:"<?php echo base_url('Devide/totalpcs/')?>"+lot_no+"",
@@ -155,9 +150,8 @@ $(document).ready(function() {
         });
     });
   function validateForm(){
-      var t_pcs = $('.xCTotal_pcs').val(); 
-      var Lot_pcs=parseInt($('.xtotalPcs').val())+1 ;
-          if(t_pcs==0){
+     var Lot_pcs=parseInt($('.xtotalPcs').val());
+          if(Lot_pcs==0){
             $.toast({
                       heading: 'Oh snap!',
                       text: 'Pcs is zero',
@@ -169,19 +163,8 @@ $(document).ready(function() {
               });
               return false;
           }
-          if(t_pcs <Lot_pcs){
+          else{
             return true;
-          }else{
-              $.toast({
-                      heading: 'Oh snap!',
-                      text: 'Enter Valid Pcs',
-                      position: 'top-right',
-                      loaderBg: '#bf441d',
-                      icon: 'error',
-                      hideAfter: 3000,
-                      stack: 1
-              });
-              return false;
           }
   }
 </script> 

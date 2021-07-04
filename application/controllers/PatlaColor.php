@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class  Cut extends CI_Controller {
+class PatlaColor extends CI_Controller {
 
     function __construct() {
         parent::__construct();
@@ -9,6 +9,7 @@ class  Cut extends CI_Controller {
         $this->load->library('session');
         $this->load->model('General_model');
         $this->load->model('CutModel');
+        $this->load->model('PatlaColorModel');
         $this->load->model('LogModel');
         $this->General_model->auth_check();
         $this->General_model->auth_role2();
@@ -17,134 +18,99 @@ class  Cut extends CI_Controller {
     public function index()
     {
         $this->General_model->auth_check();
-        $data['page_title']="Cut";
+        $data['page_title']="Patla Color";
         $this->load->view('admin/controller/header');
         $this->load->view('admin/controller/sidebar');
-        $this->load->view('admin/cut/index',$data);
+        $this->load->view('admin/patlacolor/index',$data);
         $this->load->view('admin/controller/footer');
     }
     public function get_addfrm()
     {
         $this->General_model->auth_check();
-        $data['page_title']="Cut";
-        $lot_no=$this->db->query("SELECT `lot_no` FROM `cut` ORDER BY id_cut DESC LIMIT 1");
-        $count=$lot_no->num_rows();
-        if($count>0){
-            $query=$lot_no->row();
-            $data['lot_no']=$query->lot_no+1;
-        }else{
-            $data['lot_no']=STARTLOT;
-        }
-        $data['party']=$this->General_model->get_data('party','status','*','1');
+        $data['page_title']="Patla Color entry";
+       
+        $data['color']=$this->General_model->get_data('color','status','*','1');
+        $data['patla']=$this->General_model->get_data('patla','status','*','1');
         $this->load->view('admin/controller/header');
         $this->load->view('admin/controller/sidebar');
-        $this->load->view('admin/cut/create',$data);
+        $this->load->view('admin/patlacolor/create',$data);
         $this->load->view('admin/controller/footer');
     }
     public function create()
     {
         $this->General_model->auth_check();
-        $name=ucwords(trim($this->input->post("name")));
         $date = explode('/',$this->input->post('date')); 
         $date =[$date[2],$date[1],$date[0]];
         $date=implode("-", $date);
-        $party_id=$this->input->post('party');
-        $item_id=$this->input->post('item');
-        $lot_no=trim($this->input->post("lot_no"));
-        $tp_mtr=$this->input->post('tp_mtr');
-        $t_pcs=$this->input->post('t_pcs');  
-        $t_fent=$this->input->post('t_fent');        
-        if(isset($name) && !empty($name) &&  isset($date) && !empty($date) &&  isset($party_id) && !empty($party_id) && isset($item_id) && !empty($item_id) && isset($lot_no) && !empty($lot_no)   && isset($tp_mtr) && !empty($tp_mtr) && isset($t_pcs) && !empty($t_pcs)){
-            $challan_no=$this->CutModel->challan_no();
+        $patla_id=$this->input->post('patla');
+        $total_qty=$this->input->post('t_color_qty');
+        $total=trim($this->input->post("total"));      
+        if(isset($date) && !empty($date) &&  isset($patla_id) && !empty($patla_id) && isset($total_qty) && !empty($total_qty) && isset($total) && !empty($total)){
            
             $detail=[
-                    'challan_no'=>$challan_no['challan_no'],
-                    'lot_no'=>$lot_no,
                     'date'=>$date,
-                    'name'=>$name,
-                    'party_id'=>$party_id,
-                    'item_id'=>$item_id,
-                    'purchase_mtr'=>$tp_mtr,
-                    'total_pcs'=>$t_pcs,
-                    'total_fent'=>$t_fent,
+                    'patla_id'=>$patla_id,
+                    'month'=>date('m'),
+                    'year'=>date('Y'),
+                    'total_qty'=>$total_qty,
+                    'total'=>$total,
                     'status'=>'1',
-                    'user_id'=>$_SESSION['auth_user_id'],
                     'created_at'=>date("Y-m-d h:i:s")];
-            $cut = $this->General_model->addid('cut',$detail);
-            $msg="Cut insert id ".$cut;
+            $patlacolor = $this->General_model->addid('patlacolor',$detail);
+            $msg="Patla Color insert id ".$patlacolor;
             $this->LogModel->simplelog($msg);
             $i=0;
-            $check_lot=$this->db->query("SELECT * FROM `balance` WHERE `lot_no`='".$lot_no."'")->num_rows();
            
-            foreach($this->input->post('schallan_no') as $lt)
+            foreach($this->input->post('color') as $lt)
             {
-                $challan=$this->input->post('schallan_no')[$i];
-                $p_mtr=$this->input->post('p_mtr')[$i];
-                $pcs=$this->input->post('pcs')[$i];
-                $fent=$this->input->post('fent')[$i];
-                if(isset($challan) && !empty($challan) && isset($cut) && !empty($cut) && isset($pcs) && !empty($pcs)){
-                    $cut_lot=["cut_id"=>$cut,
-                                'date'=>$date,                              
-                                "lot_no"=>$lot_no,
-                                "challan_no"=>$challan,
-                                "party_id"=>$party_id,
-                                "item_id"=>$item_id,
-                                "p_mtr"=>$p_mtr,
-                                'pcs'=>$pcs,
-                                "fent"=>$fent,
+                $color=$this->input->post('color')[$i];
+                $qty=$this->input->post('qty')[$i];
+                $rate=$this->input->post('rate')[$i];
+                $amount=$this->input->post('amount')[$i];
+                if(isset($color) && !empty($color) && isset($qty) && !empty($qty) && isset($rate) && !empty($rate)&& isset($amount) && !empty($amount)){
+                    $cut_lot=["patlacolor_id"=>$patlacolor,
+                                "color_id"=> $color,
+                                "qty"=>$qty,
+                                'rate'=>$rate,
+                                "amount"=>$amount,
                                 "created_at"=>date("Y-m-d h:i:s")];
-                    $where =['party_id'=>$party_id,'item_id'=>$item_id,'challan_no'=>$challan];
-                    $update=['status'=>0,'lot_no'=>$lot_no];
-                    $this->General_model->update_where('stock',$update,$where);
-                    $this->General_model->add('cut_lot',$cut_lot);
+                    $this->General_model->add('patlacolordetail',$cut_lot);
                 }
                 $i++;
             }
-            $updateflag = ['challan_no'=>$challan,'party_id'=>$party_id];
-            $flag=['cut'=>'1'];
-            $this->General_model->update_where('flag',$flag,$updateflag);
-
             $sess_data = ['status'  => 'success',
                             'msg'  => 'Cut Added' ];
             $this->session->set_userdata($sess_data);       
-            redirect('Cut/view_invoice/'.$cut);
+            redirect('PatlaColor/view_invoice/'.$cut);
         }else{
             $sess_data = ['status'  => 'error',
                             'msg'  => 'Something Is Worng' ];
             $this->session->set_userdata($sess_data);   
-            redirect('Cut/get_addfrm/');
+            redirect('PatlaColor/get_addfrm/');
         }
     }
     public function getLists(){
         $columns = array( 
-                    0 =>'id_cut', 
-                    1=> 'lot_no',
-                    2 =>'challan_no',
-                    3=> 'date',
-                    4=> 'name',
-                    5 =>'party_name',
-                    6 =>'use_for',
-                    7=> 'item_name',
-                    8=> 'total_pcs',
-                    9=> 'purchase_mtr',
-                    10=> 'cut_mtr',
-                    11=> 'total_fent',
-                    12=>'user_name'
+                    0 =>'patlacolor_id', 
+                    1 => 'patla_name',
+                    2 => 'date',
+                    3 => 'total_qty',
+                    4 => 'total'
                 );
         $limit = $this->input->post('length');
         $start = $this->input->post('start');
         $order = $columns[$this->input->post('order')[0]['column']];
         $dir = $this->input->post('order')[0]['dir'];
-        $totalData = $this->CutModel->allposts_count();
+        $totalData = $this->PatlaColorModel->allposts_count();
         $totalFiltered = $totalData; 
         if(empty($this->input->post('search')['value']))
         {            
-            $posts = $this->CutModel->allposts($limit,$start,$order,$dir);
+            $posts = $this->PatlaColorModel->allposts($limit,$start,$order,$dir);
         }
         else {
             $search = $this->input->post('search')['value']; 
-            $posts =  $this->CutModel->posts_search($limit,$start,$search,$order,$dir);
-            $totalFiltered = $this->CutModel->posts_search_count($search);
+            $posts =  $this->PatlaColorModel->posts_search($limit,$start,$search,$order,$dir);
+            $totalFiltered = $this->PatlaColorModel->posts_search_count($search);
         }
         $data = array();
         if(!empty($posts))
@@ -152,26 +118,19 @@ class  Cut extends CI_Controller {
             $i=1;
             foreach ($posts as $post)
             {  
-                if($_SESSION['auth_role_id']=="1"){
-                    $button='<a href="'.base_url('Cut/get_editfrm/').$post->id_cut.'"><button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
-                        <a href="'.base_url('Cut/view_invoice/').$post->id_cut.'"><button type="button" class="btn btn-custom waves-effect btn-sm  waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                        <button type="button" class="btn btn-danger waves-effect btn-sm waves-light" data-id="delete" data-value="'.$post->id_cut.'"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                }else{
-                    $button='<a href="'.base_url('Cut/get_editfrm/').$post->id_cut.'"><button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
-                        <a href="'.base_url('Cut/view_invoice/').$post->id_cut.'"><button type="button" class="btn btn-custom waves-effect btn-sm  waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>';
-                }
+               $button='<a href="'.base_url('PatlaColor/get_editfrm/').$post->patlacolor_id.'"><button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
+                        <a href="'.base_url('PatlaColor/view_invoice/').$post->patlacolor_id.'"><button type="button" class="btn btn-custom waves-effect btn-sm  waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                        <button type="button" class="btn btn-danger waves-effect btn-sm waves-light" data-id="delete" data-value="'.$post->patlacolor_id.'"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                
               
                 $nestedData['sr_no'] =$i;
-                $nestedData['challan_no'] =$post->challan_no;
-                $nestedData['name'] =$post->name;
-                $nestedData['lot_no'] =LOT.$post->lot_no;
-                $nestedData['party_name'] =$post->party_name;
-                $nestedData['item_name'] = $post->item_name;
+                $nestedData['patlacolor_id'] =$post->patlacolor_id;
+                $nestedData['patla_name'] =$post->patla_name;
+                $nestedData['month'] =$post->month;
+                $nestedData['year'] =$post->year;
+                $nestedData['total_qty'] =$post->total_qty;
+                $nestedData['total'] = $post->total;
                 $nestedData['date'] =date('d/m/Y',strtotime($post->date));
-                $nestedData['total_pcs'] =$post->total_pcs;
-                $nestedData['purchase_mtr'] = $post->purchase_mtr;
-                $nestedData['total_fent'] = $post->total_fent;
-                $nestedData['user_name'] = strtoupper($post->user_name);
                 $nestedData['button'] =$button;
                 ;
                 $data[] = $nestedData;
@@ -266,12 +225,12 @@ class  Cut extends CI_Controller {
     }
     public function view_invoice($id)
     {
-        $data['page_title']="Cut";
-        $data['cut'] = $this->db->query("SELECT t1.*,t2.party_name,t3.item_name FROM cut as t1 LEFT JOIN party as t2 ON t1.party_id = t2.party_id LEFT JOIN item as t3 ON t1.item_id = t3.item_id WHERE id_cut='".$id."'")->row();
-        $data['cut_lot'] = $this->General_model->get_data('cut_lot','cut_id','*',$id);
+        $data['page_title']="Patla Color";
+        $data['patlacolor'] = $this->db->query("SELECT t1.*,t2.patla_name FROM patlacolor as t1 LEFT JOIN patla as t2 ON t1.patla_id = t2.patla_id WHERE patlacolor_id='".$id."'")->row();
+        $data['patlacolordetail'] =  $this->db->query("SELECT t1.*,t2.color_name FROM patlacolordetail as t1 LEFT JOIN color as t2 ON t1.color_id = t2.color_id ")->result();
         $this->load->view('admin/controller/header');
         $this->load->view('admin/controller/sidebar');
-        $this->load->view('admin/cut/invoice',$data);
+        $this->load->view('admin/patlacolor/invoice',$data);
         $this->load->view('admin/controller/footer');
     }
     public function delete($id)

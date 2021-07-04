@@ -38,6 +38,7 @@
                         <li><a href="<?php echo base_url('Item')?>">Item</a></li>
                         <li><a href="<?php echo base_url('Party')?>">Party</a></li>
                         <li><a href="<?php echo base_url('Transport')?>">Transport</a></li>
+                        <li><a href="<?php echo base_url('Colors')?>">Color</a></li>
                         <li><a href="<?php echo base_url('Patla')?>">Patla</a></li>
                         <li><a href="<?php echo base_url('EmUser')?>">Em User</a></li>
                     </ul>
@@ -63,6 +64,13 @@
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('Devide/get_addfrm')?>">Create</a></li>
                         <li><a href="<?php echo base_url('Devide/index')?>">View</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);"><i class="fi-grid "></i><span> PatlaColor </span> <span class="menu-arrow"></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="<?php echo base_url('PatlaColor/get_addfrm')?>">Create</a></li>
+                        <li><a href="<?php echo base_url('PatlaColor/index')?>">View</a></li>
                     </ul>
                 </li>
                 <?php endif;?>

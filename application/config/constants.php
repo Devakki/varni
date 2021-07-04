@@ -107,11 +107,11 @@ defined('STARTLOT')   OR define('STARTLOT', 1);
 defined('HSN')   OR define('HSN',  5208);
  
 
-defined('FULL_NAME')   OR define('FULL_NAME', "TEXTILE PVT. LTD."); 
+defined('FULL_NAME')   OR define('FULL_NAME', "VARNI PRINT"); 
 defined('COM_HEADER')   OR define('COM_HEADER', "Mfg. Cotton Sarees, Kitanga, Khanga & Dress Materials."); 
-defined('ADDRESS1')    OR define('ADDRESS1', ', JETPUR-360370');
-defined('ADDRESS2')    OR define('ADDRESS2', 'Champrajpur Road, Near Bhojadhar, B/h. Mayur Plastic, JETPUR-360370'); 
-defined('GST_NO')   OR define('GST_NO', "1235234123"); 
-defined('PAN_NO')   OR define('PAN_NO', "AAJCR1231231232380L"); 
-defined('MOBILE')   OR define('MOBILE', "1234124231230"); 
+defined('ADDRESS1')    OR define('ADDRESS1', 'D. B. PADARIYA UDHYOG NAGAR, RABARIKA ROAD, NAVAGADH TEL NO. : 09537226565');
+defined('ADDRESS2')    OR define('ADDRESS2', 'D. B. PADARIYA UDHYOG NAGAR, RABARIKA ROAD, NAVAGADH TEL NO. : 09537226565'); 
+defined('GST_NO')   OR define('GST_NO', "24AMCPV038GQ1ZL"); 
+defined('PAN_NO')   OR define('PAN_NO', "24AMCPV038GQ1ZL"); 
+defined('MOBILE')   OR define('MOBILE', "09537226565"); 
 defined('SUBJECT')   OR define('SUBJECT', "Subject to JETPUR Jurisdiction"); 

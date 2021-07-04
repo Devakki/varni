@@ -6,7 +6,7 @@
                     <h4 class="page-title float-left"><?php echo $page_title; ?></h4>
                     <ol class="breadcrumb float-right">
                         <li class="breadcrumb-item"><a href="<?php echo base_url('Dashbord');?>"><?php echo COMPANY; ?></a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo base_url('Devide/index');?>"><?php echo $page_title; ?></a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo base_url('CUt/index');?>"><?php echo $page_title; ?></a></li>
                     </ol>
                     <div class="clearfix"></div>
                 </div>
@@ -19,15 +19,13 @@
                        <thead>
                        <tr>
                            <th>#</th>
-                           <th>CHALLAN NO</th>
+                           <th>C NO</th>
                            <th>DATE</th>
-                           <th>PATLA NAME</th>
-                           <th>TOTAL PCS</th>
-
-                           <?php if($_SESSION['auth_role_id']=="1"): ?>
-                           <th>ADD BY</th>
-                           <?php endif;?>
-                           
+                           <th>PATLA</th>
+                           <th>MONTH</th>
+                           <th>YEAR</th>
+                           <th>TOTALQTY</th>
+                           <th>TOTAL</th>
                            <th>ACTION</th>
                        </tr>
                        </thead>
@@ -41,31 +39,34 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+        //Buttons examples
         
         var table = $('#datatable-buttons').DataTable({
             processing: true,
             serverSide: true,
             order: [],
             ajax: {
-                   "url": "<?php echo base_url('Devide/getLists/'); ?>",
+                   "url": "<?php echo base_url('PatlaColor/getLists/'); ?>",
                    "type": "POST"
                },
             "order": [[0, "DESC" ]],
             columns: [      
                         { "data": "sr_no" },
-                        { "data": "challan_no" },
+                        { "data": "patlacolor_id" },
                         { "data": "date"},
                         { "data": "patla_name" },
-                        { "data": "total_pcs" },
-                        { "data": "user_name" },
-                        { "data": "button" }
+                        { "data": "month" },
+                        { "data": "year" },
+                        { "data": "total_qty" },
+                        { "data": "total" },
+                        { "data": "button"},
                     ],
-            columnDefs: [{ "targets": [6],"orderable": false}],
+            columnDefs: [{ "targets": [8],"orderable": false}],
             buttons: ['print','copy', 'excel', 'colvis'],
             lengthChange: false,
             dom: 'Blfrtip'
         });
-      
+       
         table.buttons().container()
                 .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
         $('#datatable-buttons').on('click', '[data-id=delete]', function () {                        
@@ -81,7 +82,7 @@
                  }).then(function () {
                  $.ajax({
                    type: "POST",
-                   url: "<?php echo base_url('Devide/delete/');?>"+id+"",
+                   url: "<?php echo base_url('Cut/delete/');?>"+id+"",
                    success: function(data){
                      var data  = JSON.parse(data);
                      if(data.status=="success"){
