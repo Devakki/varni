@@ -22,20 +22,42 @@
                 <div class="card-box">
                     <h4 class="m-t-0 header-title text-center">Add Printing</h4><br>
                     <form action="<?php echo base_url('Printing/create');?>" method="post"  class="form-horizontal" >
+
                         <div class="row">
-                          <div class="col-md-4">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">LOT NO<span class="text-danger">*</span></label>
+                             <div class="col-md-4">
+                                <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">PARTY<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <select name="lot_no" required class="xLot_No"  data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                      <select name="party" id="party" class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
                                         <option value="0">None</option>
-                                        <?php foreach ($lot_no as $key => $value): ?>
-                                            <option value="<?php echo $value->lot_no; ?>"><?php echo LOT.$value->lot_no; ?></option>
+                                        <?php foreach ($party as $key => $value): ?>
+                                            <option value="<?php echo $value->party_id; ?>"><?php echo $value->party_name; ?></option>
                                         <?php endforeach; ?>
                                       </select>
                                   </div>
+                                </div>
                               </div>
-                          </div>
+                              <div class="col-md-4">
+                              <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">Item<span class="text-danger">*</span></label>
+                                  <div class="col-8">
+                                      <select name="item" class="xItem" id="item">
+                                      </select>
+                                  </div>
+                              </div>
+                              </div>
+                              <div class="col-md-4">
+                              <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">Challan<span class="text-danger">*</span></label>
+                                  <div class="col-8">
+                                      <select name="challan" class="sChallan" id="challan">
+                                      </select>
+                                  </div>
+                              </div>
+                              </div>
+                        </div>
+                        <div class="row">
+                         
                           <div class="col-md-4">
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">DATE<span class="text-danger">*</span></label>
@@ -172,6 +194,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('form').parsley();
+    $("select").select2();
     let appendnode=$('#xAppendNode').html();
     let tablebody=$('#tableBody').html();
     var i=2;
@@ -196,6 +219,61 @@ $(document).ready(function() {
               } 
           });
     });
+    $('body').on('change','.xParty', function(e){
+        var id = $(this).val(); 
+        $('.xItem').empty();
+        $(this).focus();
+        $("select").select2();
+        $.ajax({                                            
+          url:"<?php echo base_url('cut/get_item/') ?>"+id+"",
+          type: "POST",
+          success: function(result){
+            var result  = JSON.parse(result);                            
+            if(result.status=="success"){
+              $('.xItem').append('<option></option>');
+              $.each(result.item,function(key, value)
+              {               
+                $('.xItem').append('<option value=' + value[0] + '>' + value[1] + '</option>');
+              });
+            }
+          }
+        });
+    })
+    $('body').on('change','.xItem', function(e){
+        var item=$(this).val(); 
+        $("select").select2();
+        $(this).focus();
+        var party=$(".xParty").val();
+        $.ajax({                                            
+            url:"<?php echo base_url('returndevide/get_challan/') ?>",
+            type: "POST",
+            data: {item: item, party: party},
+            success: function(result){
+                var result  = JSON.parse(result);                                
+                if(result.status=="success"){
+                  $('.sChallan').append('<option></option>');           
+                  $.each(result.challan_no,function(key,value)
+                  {
+                    $('.sChallan').append('<option value=' + value.challan_no + '>' + value.challan_no + '</option>');
+                  });             
+                }
+            }
+        });
+    });
+    $('body').on('change','.sChallan', function(e){
+        var lot_no=$(this).val();
+        $.ajax({                                            
+              url:"<?php echo base_url('ReturnDevide/totalpcs/')?>"+lot_no+"",
+              type: "POST",
+              success: function(result){
+                  var result  = JSON.parse(result);                                
+              if(result.status=="success"){
+                    $('.xtotalPcs').val((result.flag.total_pcs));
+                  }
+                } 
+            });
+        });
+   
     $('body').on('keyup','.xTotal_Pcs', function(e){
         calculate_meter();
     });
@@ -230,7 +308,7 @@ $(document).ready(function() {
       return false;
     });
     $('select').select2();
-});
+  });
   function calculate_meter(){
       var sub_meter = 0;
       var sub_taka = 0;
@@ -290,4 +368,6 @@ $(document).ready(function() {
       return false;
     }
   }
+
+  
 </script> 

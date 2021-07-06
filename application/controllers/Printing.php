@@ -24,7 +24,9 @@ class  Printing extends CI_Controller {
     {
     	$this->General_model->auth_check();
 		$data['page_title']="Printing";
-		$data['lot_no'] =$this->General_model->get_data('cut','print_status','lot_no','1');
+		$data['party']=$this->General_model->get_data('party','status','*','1');
+		$data['patla'] = $this->General_model->get_data('patla','status','patla_name,patla_id','1');
+	
 		$this->load->view('admin/controller/header');
 		$this->load->view('admin/controller/sidebar');
 		$this->load->view('admin/printing/create',$data);
@@ -332,4 +334,35 @@ class  Printing extends CI_Controller {
 		}
 		echo json_encode($data);
 	}
+	public function totalpcs($id)
+    { 			
+    	$this->General_model->auth_check();
+    	if(isset($id) && !empty($id)){
+    		$data['status']="success";
+    		$cut_row=$this->General_model->get_row('cut','challan_no',$id);
+    		$party_id=$cut_row->party_id;
+    		$item_id=$cut_row->item_id;
+    		$cut_pcs=$cut_row->total_pcs;
+    		$cut_tpcs=$this->db->query("SELECT SUM(total_pcs) as total_pcs FROM `devide` WHERE party_id='".$party_id."' and item_id='".$item_id."' and challan_no ='".$id."'")->row();
+    		$total_pcs=((empty($cut_tpcs->total_pcs) && !isset($cut_tpcs->total_pcs))?0:$cut_tpcs->total_pcs);
+    		$data['flag']=['total_pcs'=>$total_pcs];
+    	}else{
+    		$data['status']="error";
+    		$data['msg']="Something is Worng";				
+    	}
+    	echo json_encode($data);
+    }
+	public function get_challan()
+    {   
+        $this->General_model->auth_check();
+        $party=$this->input->post('party');
+        $item=$this->input->post('item');
+        if(isset($party) && !empty($party) && isset($item) && !empty($item)){
+            $cut=$this->db->query("SELECT `challan_no` FROM `devide` WHERE `party_id`='".$party."' AND `item_id`='".$item."' AND `status`='1'");
+           	$query=$cut->result();
+            $data['challan_no']=$query;
+            $data['status']="success";
+		}
+        echo json_encode($data);
+    }
 }

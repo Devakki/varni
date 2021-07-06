@@ -67,6 +67,13 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="javascript: void(0);"><i class="fi-grid "></i><span>Return Devide </span> <span class="menu-arrow"></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="<?php echo base_url('ReturnDevide/get_addfrm')?>">Create</a></li>
+                        <li><a href="<?php echo base_url('ReturnDevide/index')?>">View</a></li>
+                    </ul>
+                </li>
+                <li>
                     <a href="javascript: void(0);"><i class="fi-grid "></i><span> PatlaColor </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('PatlaColor/get_addfrm')?>">Create</a></li>
@@ -75,7 +82,7 @@
                 </li>
                 <?php endif;?>
                 <?php if($_SESSION['auth_role_id']=="1" || $_SESSION['auth_role_id']=="3"):?>
-               <!-- <li>
+               <li>
                     <a href="javascript: void(0);"><i class="mdi mdi-format-paint"></i><span> Printing </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('Printing/get_addfrm')?>">Create</a></li>
@@ -84,7 +91,7 @@
                 </li>
                 <?php endif;?>
                 <?php if($_SESSION['auth_role_id']=="1" || $_SESSION['auth_role_id']=="5"):?>
-                <li>
+               <!--      <li>
                     <a href="javascript: void(0);"><i class="fa fa-medium "></i><span> Ghadi </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="<?php echo base_url('Ghadi/get_addfrm')?>">Create</a></li>
