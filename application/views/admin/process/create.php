@@ -23,11 +23,16 @@
                     <h4 class="m-t-0 header-title text-center">Add Process</h4><br>
                     <form action="<?php echo base_url('Process/create');?>" method="post"  class="form-horizontal" >
                         <div class="row">
-                          <div class="col-md-3">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">NAME<span class="text-danger">*</span></label>
+                          <div class="col-md-4">
+                          <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">CENTER<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <input placeholder="NAME" type="text" name="name" required="" class="form-control" autocomplete="off">
+                                      <select name="party" required class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                        <option value="0">None</option>
+                                        <?php foreach ($center as $key => $value): ?>
+                                            <option value="<?php echo $value->emuser_id; ?>"><?php echo $value->em_name; ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
                                   </div>
                               </div>
                               <div class="form-group row">
@@ -37,17 +42,35 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col-md-3">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">ADDRESS</label>
+                         
+                          <div class="col-md-4">
+                                <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">PARTY<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <textarea placeholder="ADDRESS" required name="address" class="form-control"></textarea>
+                                      <select name="party" required class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                        <option value="0">None</option>
+                                        <?php foreach ($party as $key => $value): ?>
+                                            <option value="<?php echo $value->party_id; ?>"><?php echo $value->party_name; ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                  <label for="name" class="col-4 col-form-label">ITEM<span class="text-danger">*</span></label>
+                                  <div class="col-8">
+                                      <select name="item" required class="xItem" data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                        <option value="0">None</option>
+                                        <?php foreach ($item as $key => $value): ?>
+                                            <option value="<?php echo $value->item_id; ?>"><?php echo $value->item_name; ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
                                   </div>
                               </div>
                           </div>
-                          <div class="col-md-3">
+                         
+                          <div class="col-md-4">
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">LOT NO<span class="text-danger">*</span></label>
+                                  <label for="name" class="col-4 col-form-label">PRINT CODE<span class="text-danger">*</span></label>
                                   <div class="col-8">
                                       <select name="lot_no" required class="xLot_no" data-parsley-min="1" data-parsley-min-message="Select AtList One">
                                         <option value="0">None</option>
@@ -69,20 +92,7 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col-md-3">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">VAHICLE</span></label>
-                                  <div class="col-8">
-                                      <input placeholder="VAHICLE" type="text" name="vahicle" class="form-control" autocomplete="off">
-                                  </div>
-                              </div>
-                              <div class="form-group row">
-                                  <label for="lot_no" class="col-4 col-form-label">VAHICLE NO</label>
-                                  <div class="col-8">
-                                      <input placeholder="VAHICLE NO" type="text" name="vahicle_no" class="form-control" autocomplete="off">
-                                  </div>
-                              </div>
-                          </div>
+                         
                       </div>
                       <div class="row m-t-50">
                           <div class="col-lg-12">
@@ -93,7 +103,6 @@
                                         <th scope="col" width="20%">DESIGN NO</th>
                                         <th scope="col">COLOR</th>
                                         <th scope="col">TOTAL PCS</th>
-                                        <th scope="col" width="20%">PATLA</th>
                                         <th scope="col"></th>
                                       </tr>
                                   </thead>
@@ -108,16 +117,13 @@
                                         <td>
                                           <input type="number" name="pcs[]" class="form-control sD_Pcs" step="any" placeholder="TOTAL PCS" required >
                                         </td>
-                                        <td >
-                                          <select name="patla[]" class="sPatla">
-                                          </select>
-                                        </td>
+                                       
                                         <td>
                                           <button type="button" class="btn btn-icon waves-effect waves-light btn-danger btn-sm btn-remove "><i class=" fa fa-minus"></i></button>
                                         </td>
                                       </tr>
                                       <tr>
-                                        <td colspan="4">
+                                        <td colspan="3">
                                         </td>
                                         <td>
                                           <button type="button" class="btn waves-effect waves-light btn-secondary btn-add btn-sm"> <i class="fa fa-plus"></i> </button>
@@ -127,21 +133,8 @@
                                 </table>
                               </div>
                           </div>
-                          <div class="col-md-4">
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">PREVOIUS CLOTH VAL</label>
-                                  <div class="col-8">
-                                      <input placeholder="CLOTH VAL" type="number" step="any" name="" required class="form-control xPand_val" readonly autocomplete="off" >
-                                  </div>
-                              </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">PROCESS VAL</label>
-                                  <div class="col-8">
-                                      <input placeholder="PROCESS VAL"  type="number" step="any" name="process_val" class="form-control xProcess_value" required readonly autocomplete="off">
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="offset-md-4 col-md-4">
+                          
+                          <div class="offset-md-8 col-md-4">
                             <div class="form-group row">
                                 <label for="name" class="col-4 col-form-label">TOTAL DESIGN</label>
                                 <div class="col-8">
@@ -154,30 +147,7 @@
                                       <input placeholder="TOTAL PCS" type="number" name="t_pcs" required="" class="form-control xT_Pcs" readonly autocomplete="off" >
                                   </div>
                               </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">CLOTH VAL</label>
-                                  <div class="col-8">
-                                      <input placeholder="CLOTH VAL" type="number" step="any" name="cloth_val" required class="form-control xColth_val" autocomplete="off">
-                                  </div>
-                              </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">SUB TOTAL</label>
-                                  <div class="col-8">
-                                      <input placeholder="SUB TOTAL" type="number" step="any" name="sub_total" required="" class="form-control xSub_Total" readonly autocomplete="off" >
-                                  </div>
-                              </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">TAX (<?php echo TAX;?>%)</label>
-                                  <div class="col-8">
-                                      <input placeholder="TAX"  type="number" step="any" name="tax" required="" class="form-control xTax " readonly  autocomplete="off">
-                                  </div>
-                              </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">GRAND TOTAL</label>
-                                  <div class="col-8">
-                                      <input placeholder="GRAND TOTAL" type="number" step="any" name="g_total" required="" class="form-control xGrand_Total" autocomplete="off" readonly="">
-                                  </div>
-                              </div>
+                             
                           </div>
                       </div>
                       <div class="form-group text-center m-t-20 m-b-20">

@@ -17,36 +17,23 @@ $(document).ready(function() {
         var obj=$(this).parents('tr');
         callByamount(obj);
       });
-      $('body').on('keyup','.Touch', function(){
-          var touch=$(this).val();
-          if(!touch){
-          }else{
-            if(touch >= 100){
-              $(this).val(100);
-            }
-            $("#myTable >tbody> tr").each(function() {
-              if ($(this).is(':last-child')) {
-              }else{
-                var quality=$(this).find('.sQuality').val();
-                if(quality){
-                  var fine=(parseFloat(quality)*parseFloat(touch))/100;
-                  $(this).find('.sFine').val(fine.toFixed(2))
-                }
-              }
-            });
-          }
+      
+      $('body').on('keyup','.sCutmtr', function(){
+        var obj=$(this).parents('tr');
+        callByamount(obj);
       });
+      
       $('body').on('keyup','.sPrice', function(){
         var obj=$(this).parents('tr');
         callByprice(obj);
       });
       $('body').on('keyup','.sQuality', function(){
         var obj=$(this).parents('tr');
-        var touch=$('.Touch').val();
+        var touch=$('.sCutmtr').val();
         var quality=obj.find('.sQuality').val();
         if(quality){
-          var fine=(parseFloat(quality)*parseFloat(touch))/100;
-          obj.find('.sFine').val(fine.toFixed(2))
+          var fine=(parseFloat(quality)*parseFloat(touch));
+          obj.find('.sTmeter').val(fine.toFixed(2))
         }
       });
       $('body').on('click','[data-id=DltBtn]', function(){
@@ -114,22 +101,10 @@ $(document).ready(function() {
       });
       $("select").select2();
 });
-function myFunction(){
-  var tfine=$('.TFine').val();
-  var sfine = 0;
-  $('.sFine').each(function(){
-      sfine += parseFloat($(this).val());        
-  });
-  if(tfine>=sfine){
-    return true;
-  }else{
-    swal("Quantity","Please Create Invoice Under "+tfine +" Kg" ,"warning","#4fa7f3");
-    return false;
-  }
-}
+
 function validateForm() {
-  var customer=$('#customer_id').val()
-  if(customer == "0"){
+  var party=$('#party_id').val()
+  if(party == "0"){
     swal("error",'Please select Customer',"warning","#4fa7f3"); 
     return false;
   }else{
@@ -139,23 +114,20 @@ function validateForm() {
 function callByprice($obj) {
   var quality= $obj.find('.sQuality').val();
   var g_type=$('#gst_type').val();
-  var Touch=$('.Touch').val();
+  var Touch=$('.sCutmtr').val();
   if(!g_type){
     swal("error","Please Select Gst Type","warning","#4fa7f3");
     return false;
   }
-  if(!Touch){
-    swal("error","Please Enter Touch","warning","#4fa7f3");
-    return false;
-  }else{
+  
     if(!quality){
       swal("error","Please Enter Quantity","warning","#4fa7f3");
       return false;
     }else{
-      var fine=(parseFloat(quality)*parseFloat(Touch))/100;
-      $obj.find('.sFine').val(fine.toFixed(2));
+      var fine=(parseFloat(quality)*parseFloat(Touch));
+      $obj.find('.sTmeter').val(fine.toFixed(2));
       var sPrice=$obj.find('.sPrice').val();
-      var total=sPrice*quality;
+      var total=sPrice*fine;
       $obj.find('.stotal').val(total.toFixed(2));
       if(g_type==1){
         var cgst=(total*cgst_percentage)/100;
@@ -172,26 +144,23 @@ function callByprice($obj) {
       $obj.find('.sAmount').val(amount.toFixed(2));
       calculate();
     }
-  }
+  
 }
 function callByamount($obj) {
   var quality= $obj.find('.sQuality').val();
   var g_type=$('#gst_type').val();
-  var Touch=$('.Touch').val();
+  var Touch=$('.sCutmtr').val();
   if(!g_type){
     swal("error","Please Select Gst Type","warning","#4fa7f3");
     return false;
   }
-  if(!Touch){
-    swal("error","Please Enter Touch","warning","#4fa7f3");
-    return false;
-  }else{
+  
     if(!quality){
       swal("error","Please Enter Quality","warning","#4fa7f3");
       return false;
     }else{
-      var fine=(parseFloat(quality)*parseFloat(Touch))/100;
-      $obj.find('.sFine').val(fine.toFixed(2));
+      var fine=(parseFloat(quality)*parseFloat(Touch));
+      $obj.find('.sTmeter').val(fine.toFixed(2));
       var amount=$obj.find('.sAmount').val();
       var gst_percentage=100+cgst_percentage+sgst_percentage;
       var i_percentage=100+igst_percentage;
@@ -210,7 +179,7 @@ function callByamount($obj) {
         $obj.find('.sPrice').val((sellprice).toFixed(2));
         calculate();
     }
-  }
+ 
 }
 function calculate() {
   var g_type=$('#gst_type').val();

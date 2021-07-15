@@ -94,23 +94,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label">LOT NO</label>
-                                            <div class="col-sm-1">
-                                                <div class="form-check form-check-inline">
-                                                    <input id="checkbox11" class="form-check-input Lotselect" type="checkbox">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-9" id="setlot">
-                                              <select name="lot_no" >
-                                                  <?php foreach ($lot_no as $key => $value):?>
-                                                  <option value="<?php echo $value->lot_no; ?>"   <?php echo (($display)?(($value->lot_no==$edit_lotno)?"selected":"") :"") ; ?> ><?php echo LOT.$value->lot_no; ?></option>
-                                                  <?php endforeach; ?>
-                                              </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-md-12">
                                         <div class="form-group row">
                                             <div class="col-md-12 text-center">
@@ -125,14 +109,13 @@
                     <?php if($display):?>
                     <div class="row m-t-50">
                         <div class="col-md-12 divscroll">
-                            <h4 class="m-t-10 header-title text-center">Patla </h4>
+                            <h4 class="m-t-10 header-title text-center">Debit Cloth </h4>
                             <?php if(isset($devide) && !empty($devide)) :?>
                             <table class="table text-center table-bordered m-t-0 restable" >
                                 <thead>
                                     <tr>
                                         <th>No</th> 
                                         <th>Challan No</th>   
-                                        <th>Lot No</th>
                                         <th>Date</th>
                                         <th>Patla</th>
                                         <th>Devide Pcs</th>
@@ -144,10 +127,68 @@
                                         
                                         <td><?php echo $i; ?></td>
                                         <td><?php echo $value->challan_no; ?></td>
-                                        <td><?php echo LOT.$value->lot_no; ?></td>
                                         <td><?php echo date('d/m/Y', strtotime($value->date)); ?></td>
                                         <td><?php echo $value->patla_name; ?></td>
-                                        <td><?php echo $value->devide_pcs;  ?></td>
+                                        <td><?php echo $value->total_pcs;  ?></td>
+                                    </tr> 
+                                    <?php $i++; endforeach;?>
+                                </tbody>
+                            </table>
+                        <?php else: ?>
+                            <h4 class="m-t-10 header-title text-center">N-A</h4>
+                        <?php endif; ?>
+                        </div>
+                        <div class="col-md-12 divscroll">
+                            <h4 class="m-t-10 header-title text-center">Return </h4>
+                            <?php if(isset($returndevide) && !empty($returndevide)) :?>
+                            <table class="table text-center table-bordered m-t-0 restable" >
+                                <thead>
+                                    <tr>
+                                        <th>No</th> 
+                                        <th>Challan No</th>   
+                                        <th>Date</th>
+                                        <th>Patla</th>
+                                        <th>Devide Pcs</th>
+                                    </tr>                                  
+                                </thead>
+                                <tbody>
+                                    <?php $i=1; foreach ($returndevide as $key => $value):?>
+                                    <tr>
+                                        
+                                        <td><?php echo $i; ?></td>
+                                        <td><?php echo $value->challan_no; ?></td>
+                                        <td><?php echo date('d/m/Y', strtotime($value->date)); ?></td>
+                                        <td><?php echo $value->patla_name; ?></td>
+                                        <td><?php echo $value->total_pcs;  ?></td>
+                                    </tr> 
+                                    <?php $i++; endforeach;?>
+                                </tbody>
+                            </table>
+                        <?php else: ?>
+                            <h4 class="m-t-10 header-title text-center">N-A</h4>
+                        <?php endif; ?>
+                        </div><div class="col-md-12 divscroll">
+                            <h4 class="m-t-10 header-title text-center">Color </h4>
+                            <?php if(isset($color) && !empty($color)) :?>
+                            <table class="table text-center table-bordered m-t-0 restable" >
+                                <thead>
+                                    <tr>
+                                        <th>No</th>  
+                                        <th>Date</th>
+                                        <th>Patla</th>
+                                        <th>qty</th>
+                                        <th>total</th>
+                                    </tr>                                  
+                                </thead>
+                                <tbody>
+                                    <?php $i=1; foreach ($color as $key => $value):?>
+                                    <tr>
+                                        
+                                        <td><?php echo $i; ?></td>
+                                        <td><?php echo date('d/m/Y', strtotime($value->date)); ?></td>
+                                        <td><?php echo $value->patla_name; ?></td>
+                                        <td><?php echo $value->total_qty; ?></td>
+                                        <td><?php echo $value->total;  ?></td>
                                     </tr> 
                                     <?php $i++; endforeach;?>
                                 </tbody>

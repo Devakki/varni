@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class  Processss extends CI_Controller {
+class  Process extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->helper('url');
@@ -25,8 +25,10 @@ class  Processss extends CI_Controller {
     {
         $this->General_model->auth_check();
         $data['page_title']="Process";
-        $data['lot_no'] =$this->db->query("SELECT lot_no FROM `cut` WHERE `process_status` = 1 ORDER BY `lot_no` DESC")->result();
         $data['sub_process'] = $this->General_model->get_data('sub_process','status','*','1');
+        $data['center'] = $this->General_model->get_data('em_user','status','*','1');
+        $data['party'] = $this->General_model->get_data('party','status','*','1');
+        $data['item'] = $this->General_model->get_data('item','status','*','1');
         $this->load->view('admin/controller/header');
         $this->load->view('admin/controller/sidebar');
         $this->load->view('admin/process/create',$data);

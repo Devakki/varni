@@ -37,9 +37,10 @@
                                   <th style="width:30%">Challan No</th>
                                   <td> <?php echo $printing->challan_no; ?></td>
                               </tr>
+                             
                               <tr>
-                                  <th>Lot No</th>
-                                  <td><?php  echo LOT.$printing->lot_no; ?></td>
+                                  <th>Patla</th>
+                                  <td><?php  echo $printing->patla_name; ?></td>
                               </tr>
                           </table>
                         </div>
@@ -49,6 +50,14 @@
                                 <th>Date</th>
                                 <td><?php echo date('d/m/Y', strtotime($printing->date)); ?></td>
                               </tr>
+                              <tr>
+                                  <th>Party</th>
+                                  <td><?php  echo $printing->party_name; ?></td>
+                              </tr> 
+                              <tr>
+                                  <th>Item</th>
+                                  <td><?php  echo $printing->item_name; ?></td>
+                              </tr> 
                             </table>
                         </div>
                     </div>
@@ -62,7 +71,6 @@
                                 <th>Color</th>
                                 <th>Pcs</th>
                                 <th>Miss Print</th>
-                                <th>Patla Name</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -74,7 +82,6 @@
                                    <td><?php echo $rw->color; ?></td>
                                    <td><?php echo $rw->pcs; ?></td>
                                    <td><?php echo $rw->miss_pcs; ?></td>
-                                   <td><?php echo $rw->patla_name;?></td>
                                 </tr>
                                <?php $no++; } ?>
                             </tbody>
@@ -104,22 +111,7 @@
                                     <th>Total Pcs</th>
                                     <td><?php echo $printing->t_pcs;?></td>
                                 </tr>
-                                <tr>
-                                    <th>Cloth Value</th>
-                                    <td><?php echo number_format($printing->cloth_value,2);?></td>
-                                </tr>
-                                <tr>
-                                    <th>Sub Total</th>
-                                    <td><?php echo number_format($printing->sub_total,2); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Tax (<?php echo TAX;?>%)</th>
-                                    <td><?php echo number_format($printing->tax,2); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Total Fent</th>
-                                    <td><?php echo number_format($printing->g_total,2); ?></td>
-                                </tr>
+                               
                             </table>
                         </div>
                    </div>

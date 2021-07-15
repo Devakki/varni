@@ -6,21 +6,12 @@
                     <a href="<?php echo base_url('Dashbord')?>"><i class="fi-air-play"></i><span class="badge badge-success pull-right"></span> <span> Dashbord </span></a>
                 </li>
                 <?php if($_SESSION['auth_role_id']=="1"):?>
-               <!-- ` <li>
+               <li>
                     <a href="javascript: void(0);"><i class="mdi mdi-cloud-print"></i><span> Print </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="<?php echo base_url('PrintAll/general_lot')?>">General Lot</a></li>
-                        <li><a href="<?php echo base_url('PrintAll/party_lot')?>">Party Lot</a></li>
-                        <li><a href="<?php echo base_url('PrintAll/patla_lot')?>">Patla Lot</a></li>
-                        <li><a href="<?php echo base_url('PrintAll/cut_lot')?>">Cut</a></li>
                         <li><a href="<?php echo base_url('PrintAll/patla')?>">Patla</a></li>
-                        <li><a href="<?php echo base_url('PrintAll/printing')?>">Printing</a></li>
-                        <li><a href="<?php echo base_url('PrintAll/process')?>">Process</a></li>
-                        <li><a href="<?php echo base_url('PrintAll/emdevide')?>">Em-Devide</a></li>
-                        <li><a href="<?php echo base_url('PrintAll/embroidery')?>">Embroidery</a></li>
-                        <li><a href="<?php echo base_url('PrintAll/stock')?>">Stock</a></li>
                     </ul>
-                </li>` -->
+                </li>
                 <?php endif;?>
                 <?php if($_SESSION['auth_role_id']=="1"):?>
                 <!-- <li>
@@ -40,7 +31,7 @@
                         <li><a href="<?php echo base_url('Transport')?>">Transport</a></li>
                         <li><a href="<?php echo base_url('Colors')?>">Color</a></li>
                         <li><a href="<?php echo base_url('Patla')?>">Patla</a></li>
-                        <li><a href="<?php echo base_url('EmUser')?>">Em User</a></li>
+                        <li><a href="<?php echo base_url('EmUser')?>">Center</a></li>
                     </ul>
                 </li>
                 <?php endif;?>
@@ -89,6 +80,28 @@
                         <li><a href="<?php echo base_url('Printing/index')?>">View</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a href="javascript: void(0);"><i class="mdi mdi-format-paint"></i><span> Process </span> <span class="menu-arrow"></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="<?php echo base_url('Process/get_addfrm')?>">Create</a></li>
+                        <li><a href="<?php echo base_url('Process/index')?>">View</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);"><i class="mdi mdi-package-variant-closed"></i><span> Packing </span> <span class="menu-arrow"></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="<?php echo base_url('Packing/get_addfrm')?>">Create</a></li>
+                        <li><a href="<?php echo base_url('Packing/index')?>">View</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);"> <i class="mdi mdi-script"></i><span> Invoice </span> <span class="menu-arrow"></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="<?php echo base_url('SellInvoice')?>"> Sale OC</a></li>
+                        <li><a href="<?php echo base_url('Sellinvoice1')?>"> Sale JB</a></li>
+                        <li><a href="<?php echo base_url('SellPurchase')?>"> Purchase</a></li>                                    
+                    </ul>
+                </li>
                 <?php endif;?>
                 <?php if($_SESSION['auth_role_id']=="1" || $_SESSION['auth_role_id']=="5"):?>
                <!--      <li>
@@ -116,13 +129,7 @@
                 </li>
                 <?php endif;?>
                 <?php if($_SESSION['auth_role_id']=="1" || $_SESSION['auth_role_id']=="7"):?>
-                <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-package-variant-closed"></i><span> Packing </span> <span class="menu-arrow"></span></a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="<?php echo base_url('Packing/get_addfrm')?>">Create</a></li>
-                        <li><a href="<?php echo base_url('Packing/index')?>">View</a></li>
-                    </ul>
-                </li>
+               
                 <?php endif;?>
                 <?php if($_SESSION['auth_role_id']=="1"):?>
                 <li>

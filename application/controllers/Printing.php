@@ -35,41 +35,34 @@ class  Printing extends CI_Controller {
 	public function create()
 	{
 		$this->General_model->auth_check();
-		$lot_no=trim($this->input->post("lot_no"));
+	
+		$challan_no=$this->input->post("challan");
+		$item_id=$this->input->post("item");
+		$party_id=$this->input->post("party");
+		$patla_id=$this->input->post("patla");
 		$date = explode('/',$this->input->post('date')); 
 		$date =[$date[2],$date[1],$date[0]];
 		$date=implode("-", $date);
-		$lot_pcs=$this->input->post('lot_pcs');
+		$total_pcs=$this->input->post('total_pcs');
 		$t_design=$this->input->post('t_design');
 		$t_pcs=$this->input->post('t_pcs');
 		$t_missprint=$this->input->post('t_missprint');
-		$cloth_val=$this->input->post('cloth_val');
-		$sub_total=$this->input->post('sub_total');
-		$tax=$this->input->post('tax');
-		$g_total=$this->input->post('g_total');
-		$printing_val=$this->input->post('printing_val');
-		if(isset($lot_no) && !empty($lot_no) &&  isset($date) && !empty($date) && isset($t_design) && !empty($t_design) && isset($t_pcs) && !empty($t_pcs)&& isset($cloth_val) && !empty($cloth_val) && isset($sub_total) && !empty($sub_total)&& isset($printing_val) && !empty($printing_val)){
-			$challan_no=$this->PrintingModel->challan_no();
-			$detail=['challan_no'=>$challan_no['challan_no'],
-						'lot_no'=>$lot_no,
+		if(isset($challan_no) && !empty($challan_no) &&  isset($date) && !empty($date) && isset($t_design) && !empty($t_design) && isset($t_pcs) && !empty($t_pcs)){
+
+			$detail=['challan_no'=>$challan_no,
+						'party_id'=>$party_id,
+						'item_id'=>$item_id,
+						'patla_id'=>$patla_id,
 						'date'=>$date,
 						't_design'=>$t_design,
 						't_pcs'=>$t_pcs,
 						't_missprint'=>$t_missprint,
-						'cloth_value'=>$cloth_val,
-						'sub_total'=>$sub_total,
-						'tax'=>$tax,
-						'g_total'=>$g_total,
-						'print_val'=>$printing_val,
 						'user_id'=>$_SESSION['auth_user_id'],
 						'status'=>'1',
 						'created_at'=>date("Y-m-d h:i:s")];
 			$printing = $this->General_model->addid('printing',$detail);
 			$msg="printing insert Lotno ".$lot_no;
 			$this->LogModel->simplelog($msg);
-			$this->General_model->update('balance',['print_cloth'=>$printing_val],'lot_no',$lot_no);
-			$this->General_model->update('cut',['print_status'=>0],'lot_no',$lot_no);
-			$party=$this->General_model->get_row('cut','lot_no',$lot_no);
 			$i=0;
 			foreach ($this->input->post('design_no') as $key) {
 				$design_no=$this->input->post('design_no')[$i];
@@ -77,19 +70,17 @@ class  Printing extends CI_Controller {
 				$color=$this->input->post('color')[$i];
 				$pcs=$this->input->post('pcs')[$i];
 				$miss_print=$this->input->post('miss_print')[$i];
-				$patla_id=$this->input->post('patla')[$i];
 				if(isset($printing) && !empty($printing) && !empty($design_no) && !empty($color)  &&!empty($pcs) && !empty($patla_id)){
 					$design_unique=$this->PrintingModel->unique_design();
 					$priting_lot=['printing_id'=>$printing,
-									'lot_no'=>$lot_no,
+									'challan_no'=>$challan_no,
 									'design_no'=>$design_no,
 									'unique_design'=>$design_unique,
 									'color'=>$color,
 									'date'=>$date,
-									'party_id'=>$party->party_id,
+									'party_id'=>$party_id,
 									'pcs'=>$pcs,
 									'miss_pcs'=>$miss_print,
-									'patla_id'=>$patla_id,
 									'status'=>1,
 									'created_at'=>date("Y-m-d h:i:s")];
 					$this->General_model->add('priting_lot',$priting_lot);
@@ -110,15 +101,11 @@ class  Printing extends CI_Controller {
 	public function getLists(){
 		$columns = array( 
                     0 =>'printing_id', 
-                    1 =>'lot_no',
-                    2=> 'challan_no',
-                    3=> 'date',
-                    4 =>'t_missprint',
-                    5 =>'t_pcs',
-                    6=> 'cloth_value',
-                    7=> 'g_total',
-                    8=> 'print_val',
-                    8=> 'user_name',
+                    1=> 'challan_no',
+                    2=> 'date',
+                    3 =>'t_missprint',
+                    4 =>'t_pcs',
+                    5=> 'user_name',
                 );
 		$limit = $this->input->post('length');
 		$start = $this->input->post('start');
@@ -151,14 +138,10 @@ class  Printing extends CI_Controller {
 		        		<a href="'.base_url('Printing/view_invoice/').$post->printing_id .'"><button type="button" class="btn btn-custom btn-sm waves-effect waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>';
 		    	}
 		        $nestedData['sr_no'] =$i;
-		        $nestedData['lot_no'] =LOT.$post->lot_no;
 		        $nestedData['challan_no'] =$post->challan_no;
 		        $nestedData['date'] =date('d/m/Y',strtotime($post->date));
 		        $nestedData['t_missprint'] =$post->t_missprint;
 		        $nestedData['t_pcs'] =$post->t_pcs;
-		        $nestedData['cloth_value'] = number_format($post->cloth_value,2);
-		        $nestedData['g_total'] =  number_format($post->g_total,2);
-		        $nestedData['print_val'] = number_format($post->print_val,2);
 		        $nestedData['user_name'] = strtoupper($post->user_name);
 		        $nestedData['button'] =$button;
 		        $data[] = $nestedData;
@@ -270,8 +253,10 @@ class  Printing extends CI_Controller {
     public function view_invoice($id)
     {
     	$data['page_title']="Devide";
-    	$data['printing']=$this->General_model->get_row('printing','printing_id',$id);
-    	$data['printing_lot']=$this->db->query("select t1.*,t2.patla_name from priting_lot as t1,patla as t2 where printing_id='".$id."' and t1.patla_id=t2.patla_id ORDER BY `t1`.`design_no` ASC")->result();
+
+    	$data['printing']=$this->db->query("select t1.*,p1.party_name,i1.item_name,p2.patla_name from printing as t1,party as p1,item as i1,patla as p2 where printing_id='".$id."' and  p1.party_id=t1.party_id  and t1.item_id=i1.item_id and t1.patla_id=p2.patla_id")->row();
+
+    	$data['printing_lot']=$this->db->query("select t1.* from priting_lot as t1 where printing_id='".$id."'  ORDER BY `t1`.`design_no` ASC")->result();
     	$this->load->view('admin/controller/header');
 		$this->load->view('admin/controller/sidebar');
 		$this->load->view('admin/printing/invoice',$data);
@@ -361,6 +346,18 @@ class  Printing extends CI_Controller {
             $cut=$this->db->query("SELECT `challan_no` FROM `devide` WHERE `party_id`='".$party."' AND `item_id`='".$item."' AND `status`='1'");
            	$query=$cut->result();
             $data['challan_no']=$query;
+            $data['status']="success";
+		}
+        echo json_encode($data);
+    }
+	public function get_patla()
+    {   
+        $this->General_model->auth_check();
+        $challan_no=$this->input->post('challan_no');
+        if(isset($challan_no) && !empty($challan_no) ){
+            $cut=$this->db->query("SELECT p.`patla_id`,p.patla_name FROM `devide` as d,patla as p WHERE d.`challan_no`='".$challan_no."' and d.patla_id=p.patla_id AND d.`status`='1'");
+           	$query=$cut->result();
+            $data['patla']=$query;
             $data['status']="success";
 		}
         echo json_encode($data);

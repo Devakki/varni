@@ -19,14 +19,10 @@
                        <thead>
                        <tr>
                            <th>#</th>
-                           <th>LOT NO</th>
                            <th>CHALLAN NO</th>
                            <th>DATE</th>
                            <th>T MISSPRINT</th>
                            <th>TOTAL PCS</th>
-                           <th>CLOTH VAL</th>
-                           <th>G TOTAL</th>
-                           <th>PRINT VALUE</th>
                            <?php if($_SESSION['auth_role_id']=="1"): ?>
                            <th>ADD BY</th>
                            <?php endif;?>
@@ -44,7 +40,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         //Buttons examples
-        <?php if($_SESSION['auth_role_id']=="1"): ?>
+       
         var table = $('#datatable-buttons').DataTable({
             processing: true,
             serverSide: true,
@@ -56,50 +52,19 @@
             "order": [[0, "DESC" ]],
             columns: [      
                         { "data": "sr_no" },
-                        { "data": "lot_no" },
                         { "data": "challan_no" },
                         { "data": "date"},
                         { "data": "t_missprint" },
                         { "data": "t_pcs" },
-                        { "data": "cloth_value" },
-                        { "data": "g_total" },
-                        { "data": "print_val" },
                         { "data": "user_name" },
                         { "data": "button" }
                     ],
-            columnDefs: [{ "targets": [10],"orderable": false}],
+            columnDefs: [{ "targets": [6],"orderable": false}],
             buttons: ['print','copy', 'excel', 'colvis'],
             lengthChange: false,
             dom: 'Blfrtip'
         });
-        <?php else :?>
-        var table = $('#datatable-buttons').DataTable({
-            processing: true,
-            serverSide: true,
-            order: [],
-            ajax: {
-                   "url": "<?php echo base_url('Printing/getLists/'); ?>",
-                   "type": "POST"
-               },
-            "order": [[0, "DESC" ]],
-            columns: [      
-                        { "data": "sr_no" },
-                        { "data": "lot_no" },
-                        { "data": "challan_no" },
-                        { "data": "date"},
-                        { "data": "t_missprint" },
-                        { "data": "t_pcs" },
-                        { "data": "cloth_value" },
-                        { "data": "g_total" },
-                        { "data": "print_val" },
-                        { "data": "button" }
-                    ],
-            columnDefs: [{ "targets": [9],"orderable": false}],
-            buttons: ['print','copy', 'excel', 'colvis'],
-            lengthChange: false,
-            dom: 'Blfrtip'
-        });
-        <?php endif; ?>
+       
         table.buttons().container()
                 .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
         $('#datatable-buttons').on('click', '[data-id=delete]', function () {                        
