@@ -50,7 +50,7 @@
                                   </div>
                               </div>
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">Item<span class="text-danger">*</span></label>
+                                  <label for="name" class="col-4 col-form-label">ITEM<span class="text-danger">*</span></label>
                                   <div class="col-8">
                                       <select name="item" class="xItem" id="item">
                                       </select>
@@ -59,13 +59,11 @@
                           </div>
                           <div class="col-md-4">
                               <div class="form-group row">
-                                  <label for="lot_no" class="col-4 col-form-label">LOT NO<span class="text-danger">*</span></label>
+                                  <label for="name" class="col-4 col-form-label">TOTAL STOCK MTR<span class="text-danger">*</span></label>
                                   <div class="col-8">
-                                      <input placeholder="Lot No" type="number" name="lot_no" required="" class="form-control xLotno" autocomplete="off" value="<?php echo $lot_no; ?>">
-                                      <input type="hidden" id="exist" name="exist" value="1">
+                                      <input placeholder="TOTAL STOCK MTR" type="number" name="t_stock_mtr" required=""  class="form-control tStockMtr" readonly>
                                   </div>
                               </div>
-                              
                           </div>
                       </div>
                       <div class="row m-t-50">
@@ -100,7 +98,7 @@
                                         </td>
                                       </tr>
                                       <tr>
-                                        <td colspan="5">
+                                        <td colspan="4">
                                         </td>
                                         <td>
                                           <button type="button" class="btn waves-effect waves-light btn-secondary btn-add btn-sm"> <i class="fa fa-plus"></i> </button>
@@ -111,7 +109,6 @@
                               </div>
                           </div>
                           <div class="offset-md-8 col-md-4">
-                             
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">TOTAL P MTR</label>
                                   <div class="col-8">
@@ -149,7 +146,6 @@ $(document).ready(function() {
     let appendnode=$('#xAppendNode').html();
     let tablebody=$('#tableBody').html();
     var i=2;
-    check_lot_no();
     $('body').on('change','.xParty', function(e){
         var id = $(this).val(); 
         $('#tableBody').empty();      
@@ -157,6 +153,7 @@ $(document).ready(function() {
         $('.xItem').empty();
         $(this).focus();
         $("select").select2();
+        $('.tStockMtr').val(0);
         $.ajax({                                            
           url:"<?php echo base_url('cut/get_item/') ?>"+id+"",
           type: "POST",
@@ -184,7 +181,9 @@ $(document).ready(function() {
             type: "POST",
             data: {item: item, party: party},
             success: function(result){
-                var result  = JSON.parse(result);                                
+                var result  = JSON.parse(result);
+
+                $('.tStockMtr').val(result.stock_mtr);                           
                 if(result.status=="success"){
                   $('.sChallan').append('<option></option>');           
                   $.each(result.challan_no,function(key,value)
@@ -197,7 +196,7 @@ $(document).ready(function() {
     });
     $('body').on('change','.sChallan', function(e){
         var id = $(this).val();
-        var tr =$(this).parents('tr'); 
+        var tr =$(this).parents('tr');
         var party=$('.xParty').val();
         var item=$('.xItem').val(); 
         $.ajax({                                            
@@ -222,35 +221,6 @@ $(document).ready(function() {
         tr=$(this).parents('tr');
         calculate_obj(tr);
         calculate_meter();
-    });
-    $('.xLotno').keyup(function() {
-      
-        let value=$(this).val();        
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('Cut/check_lotno')?>",
-            data: {lot_no:value},
-            success: function(data){
-              var data  = JSON.parse(data);                                          
-              if(data.status=="success")
-              {
-                $("#exist").val("1");
-                $(".xLotno").removeClass("has-error"); 
-              }else
-              {
-                $("#exist").val("0");
-                $.toast({
-                        text: data.msg,
-                        position: 'top-right',
-                        loaderBg: '#bf441d',
-                        icon: 'error',
-                        hideAfter: 3000,
-                        stack: 1
-                });
-                $(".xLotno").addClass("has-error");               
-              }
-            } 
-        });
     });
     $('body').on('click','.btn-add', function(){
       let tr=$(this).parents('tr');
@@ -278,7 +248,6 @@ function calculate_obj($tr){
     var sPMeter =parseFloat($tr.find('.sPMeter').val());
 }
 function calculate_meter(){
-  
     var sPMeter=0
     $('.sPMeter').each(function(){
         sPMeter += parseFloat($(this).val());        
@@ -295,42 +264,13 @@ function calculate_meter(){
     });
     $('.xTemp_Meter').val(sFent.toFixed(2));
   }
-  function check_lot_no(){
-
-    let value=$('.xLotno').val();        
-    $.ajax({
-        type: "POST",
-        url: "<?php echo base_url('Cut/check_lotno')?>",
-        data: {lot_no:value},
-        success: function(data){
-          var data  = JSON.parse(data);                                          
-          if(data.status=="success")
-          {
-            $("#exist").val("1");
-            $(".xLotno").removeClass("has-error"); 
-          }else
-          {
-            $("#exist").val("0");
-            $.toast({
-                    text: data.msg,
-                    position: 'top-right',
-                    loaderBg: '#bf441d',
-                    icon: 'error',
-                    hideAfter: 3000,
-                    stack: 1
-            });
-            $(".xLotno").addClass("has-error");               
-          }
-        } 
-    });
-  }
   function validateForm(){
-      var val=$('#exist').val();
-      if(val=="1"){
-        return true;      
-      }else{
-        $("#challan_no").focus();
-        return false;
+      var t_stock_mtr=$('.tStockMtr').val();
+      var t_cut_mtr=$('.xPMtr').val();
+      if(t_stock_mtr >= t_cut_mtr ){
+        return true;
       }
+      swal("error","PURCHSE MTR NOT AVIALABLE","warning","#4fa7f3");
+      return false;
   }
 </script> 

@@ -6,7 +6,7 @@
                     <h4 class="page-title float-left"><?php echo $page_title; ?></h4>
                     <ol class="breadcrumb float-right">
                         <li class="breadcrumb-item"><a href="<?php echo base_url('Dashbord');?>"><?php echo COMPANY; ?></a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo base_url('ReturnDevide/index');?>"><?php echo $page_title; ?></a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo base_url('Devide/index');?>"><?php echo $page_title; ?></a></li>
                     </ol>
                     <div class="clearfix"></div>
                 </div>
@@ -19,15 +19,15 @@
                        <thead>
                        <tr>
                            <th>#</th>
+                           <th>INV NO</th>
                            <th>CHALLAN NO</th>
                            <th>DATE</th>
-                           <th>PATLA NAME</th>
+                           <th>PATLA</th>
+                           <th>ITEM</th>
+                           <th>PARTY</th>
                            <th>TOTAL PCS</th>
-
-                           <?php if($_SESSION['auth_role_id']=="1"): ?>
-                           <th>ADD BY</th>
-                           <?php endif;?>
-                           
+                           <th>G TOTAL</th>  
+                           <th>ADD BY</th>                           
                            <th>ACTION</th>
                        </tr>
                        </thead>
@@ -41,7 +41,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        
         var table = $('#datatable-buttons').DataTable({
             processing: true,
             serverSide: true,
@@ -54,18 +53,21 @@
             columns: [      
                         { "data": "sr_no" },
                         { "data": "challan_no" },
+                        { "data": "devide_challan_no" },
                         { "data": "date"},
                         { "data": "patla_name" },
+                        { "data": "item_name" },
+                        { "data": "party_name" },
                         { "data": "total_pcs" },
+                        { "data": "g_total" },
                         { "data": "user_name" },
                         { "data": "button" }
                     ],
-            columnDefs: [{ "targets": [6],"orderable": false}],
+            columnDefs: [{ "targets": [10],"orderable": false}],
             buttons: ['print','copy', 'excel', 'colvis'],
             lengthChange: false,
             dom: 'Blfrtip'
         });
-      
         table.buttons().container()
                 .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
         $('#datatable-buttons').on('click', '[data-id=delete]', function () {                        

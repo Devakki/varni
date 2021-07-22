@@ -38,16 +38,12 @@
                                   <td> <?php echo ucwords($cut->name); ?></td>
                               </tr>
                               <tr>
-                                  <th>Lot No</th>
-                                  <td><?php  echo LOT.$cut->lot_no; ?></td>
-                              </tr>
-                              <tr>
                                   <th>Party</th>
                                   <td><?php echo ucwords($cut->party_name); ?></td>
                               </tr> 
                           </table>
                         </div>
-                        <div class="col-md-4">
+                        <div class="offset-md-4 col-md-4">
                             <table class="table table-borderless">
                               <tr>
                                 <th style="width:50%">Challan No:</th>
@@ -63,22 +59,7 @@
                               </tr> 
                             </table>
                         </div>
-                        <div class="col-md-4">
-                            <table class="table table-borderless">
-                                <tr>
-                                    <th style="width:50%">Total Meter</th>
-                                    <td><?php echo $cut->purchase_mtr; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Total Pcs</th>
-                                    <td><?php echo $cut->total_pcs; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Total Fent</th>
-                                    <td><?php echo $cut->total_fent; ?></td>
-                                </tr>
-                            </table>
-                        </div>
+                        
                     </div>
                     <div class="row">
                         <div class="col-md-12 divscroll">
@@ -108,8 +89,22 @@
                         </div>
                    </div>
                    <div class="row m-t-20">
-                        
-                       
+                        <div class="offset-md-8 col-md-4">
+                            <table class="table">
+                                <tr>
+                                    <th style="width:50%">Total Meter</th>
+                                    <td><?php echo number_format($cut->total_purchase_mtr,2); ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Total Pcs</th>
+                                    <td><?php echo $cut->total_pcs; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Total Fent</th>
+                                    <td><?php echo number_format($cut->total_fent,2); ?></td>
+                                </tr>
+                            </table>
+                        </div>
                    </div>
                </div>
            </div>

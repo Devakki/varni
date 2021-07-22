@@ -27,7 +27,7 @@
         <div class="row">
            <div class="col-12">
                <div class="card-box">
-                    <h4 class="m-t-0 header-title m-b-30 text-right">COLOR CHALLAN</h4>
+                    <h4 class="m-t-0 header-title m-b-30 text-right">PATLA COLOR CHALLAN</h4>
                     <h2 class="m-t-0 text-center"><?php echo FULL_NAME; ?></h2>
                     <h4 class="m-t-0 header-title text-center"><?php echo ADDRESS1; ?></h4>
                     <div class="row m-t-50">
@@ -35,16 +35,19 @@
                           <table class="table table-borderless">
                               <tr>
                                   <th style="width:30%">M/s</th>
-                                  <td> <?php echo ucwords($patlacolor->patla_name); ?></td>
+                                  <td> <?php echo ucwords($patla_color->patla_name); ?></td>
                               </tr>
+ 
+                          </table>
+                        </div>
+                        <div class="offset-md-4 col-md-4">
+                          <table class="table table-borderless">
                               <tr>
-                                  <th>Challan No</th>
-                                  <td><?php echo $patlacolor->patlacolor_id; ?></td>
+                                  <th>Invoice No</th>
+                                  <td><?php echo $patla_color->challan_no; ?></td>
                               </tr> 
                           </table>
                         </div>
-                       
-                       
                     </div>
                     <div class="row">
                         <div class="col-md-12 divscroll">
@@ -60,10 +63,10 @@
                                 </thead>
                                 <tbody>
                                   <?php $no = 1;
-                                    foreach($patlacolordetail as $rw){?>
+                                    foreach($patla_color_lot as $rw){?>
                                     <tr>
                                        <td><?php echo $no; ?></td>
-                                       <td><?php echo $rw->color_name; ?></td>
+                                       <td><?php echo ucwords($rw->color_name); ?></td>
                                        <td><?php echo $rw->qty." GM"; ?></td>
                                        <td><?php echo $rw->rate; ?></td>
                                        <td><?php echo number_format($rw->amount,2);?></td>
@@ -72,17 +75,17 @@
                                 </tbody>
                           </table>
                         </div>
-                   </div>
-                   <div class="row m-t-20">
-                   <div class="col-md-4">
-                            <table class="table table-borderless">
+                    </div>
+                    <div class="row m-t-20">
+                        <div class="offset-md-8 col-md-4 mt-5">
+                            <table class="table">
                                 <tr>
                                     <th style="width:50%">Total Qty</th>
-                                    <td><?php echo $patlacolor->total_qty; ?></td>
+                                    <td><?php echo $patla_color->total_qty; ?></td>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td><?php echo $patlacolor->total; ?></td>
+                                    <td><?php echo $patla_color->total; ?></td>
                                 </tr>
                             </table>
                         </div>

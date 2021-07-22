@@ -33,7 +33,6 @@ class  Devide extends CI_Controller {
     }
 	public function create()
 	{
-		
 		$this->General_model->auth_check();
 		$date = explode('/',$this->input->post('date')); 
 		$date =[$date[2],$date[1],$date[0]];
@@ -44,31 +43,29 @@ class  Devide extends CI_Controller {
 		$party_id=$this->input->post('party');
 		$challan_no=$this->input->post('challan');
 		if(isset($date) && !empty($date) && isset($patla_id) && !empty($patla_id) && isset($party_id) && !empty($party_id)&& isset($item_id) && !empty($item_id) && isset($total_pcs) && !empty($total_pcs)){
-				$msg="Devide insert challan no ".$challan_no;
-				$this->LogModel->simplelog($msg);
-			$devide=['challan_no'=>$challan_no,
+			$cut_lot=$this->db->query("SELECT * FROM `cut_lot` WHERE `cutlot_id`='".$challan_no."'")->row();
+			$invoice_no=$this->DevideModel->challan_no();
+			$devide=['challan_no'=>$invoice_no['challan_no'],
 						'party_id'=>$party_id,
 						'item_id'=>$item_id,							
 						'date'=>$date,
 						'patla_id'=>$patla_id,
 						'total_pcs'=>$total_pcs,
 						'user_id'=>$_SESSION['auth_user_id'],
+						'cutlot_id'=>$challan_no,
+						'cutlot_challan'=>$cut_lot->challan_no,
 						'status'=>'1',
 						'created_at'=>date("Y-m-d h:i:s")];
 			$devide1 = $this->General_model->addid('devide',$devide);
-			$where =['party_id'=>$party_id,'item_id'=>$item_id,'challan_no'=>$challan_no];
+			$msg="Devide insert Id ".$devide1;
+			$this->LogModel->simplelog($msg);
+			$where =['party_id'=>$party_id,'item_id'=>$item_id,'cutlot_id'=>$challan_no];
 			$update=['status'=>0];
-			$this->General_model->update_where('cut',$update,$where);
-			if($devide1)
-			{
-				$data_account =['patla_id'=>$patla_id, 'pcs'=>$total_pcs, 'type'=>'credit', 'cur_month'=>date('m'), 'cur_year'=>date('y'),'status'=>0];
-				$ada_acoount = $this->General_model->addid('patla_account',$data_account);
-				$sess_data = ['status'  => 'success',
-				            'msg'  => 'Devide Added' ];
+			$this->General_model->update_where('cut_lot',$update,$where);
+			$sess_data = ['status'  => 'success',
+			            'msg'  => 'Devide Added' ];
 			$this->session->set_userdata($sess_data);		
-			redirect('Devide/view_invoice/'.$devide);
-			}
-			
+			redirect('Devide/view_invoice/'.$devide1);
 		}else{
 			$sess_data = ['status'  => 'error',
 				            'msg'  => 'Something Is Worng' ];
@@ -79,10 +76,13 @@ class  Devide extends CI_Controller {
 	public function getLists(){
 		$columns = array( 
                     0 =>'devide_id', 
-                    2 =>'challan_no',
+                    1 =>'challan_no',
+                    2 =>'cutlot_challan',
                     3=> 'date',
                     4 =>'patla_name',
-                    6=> 'devide_pcs',
+                    5 =>'item_name',
+                    6 =>'party_name',
+                    7=> 'total_pcs',
                     8=> 'user_name',
                 );
 		$limit = $this->input->post('length');
@@ -106,18 +106,16 @@ class  Devide extends CI_Controller {
 		    $i=1;
 		    foreach ($posts as $post)
 		    {
-	    		if($_SESSION['auth_role_id']=="1"){
-	    			$button='<a href="'.base_url('Devide/get_editfrm/').$post->devide_id.'"><button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
-		        	<a href="'.base_url('Devide/view_invoice/').$post->devide_id.'"><button type="button" class="btn btn-custom btn-sm waves-effect waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-		        	<button type="button" class="btn btn-danger btn-sm waves-effect waves-light" data-id="delete" data-value="'.$post->devide_id.'"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-	    		}else{
-	    			$button='<a href="'.base_url('Devide/get_editfrm/').$post->devide_id.'"><button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
-		        		<a href="'.base_url('Devide/view_invoice/').$post->devide_id.'"><button type="button" class="btn btn-custom btn-sm waves-effect waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>';
-	    		}
+			$button='<a href="'.base_url('Devide/get_editfrm/').$post->devide_id.'"><button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
+        	<a href="'.base_url('Devide/view_invoice/').$post->devide_id.'"><button type="button" class="btn btn-custom btn-sm waves-effect waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+        	<button type="button" class="btn btn-danger btn-sm waves-effect waves-light" data-id="delete" data-value="'.$post->devide_id.'"><i class="fa fa-trash" aria-hidden="true"></i></button>';
 		        $nestedData['sr_no'] =$i;
 		        $nestedData['challan_no'] =$post->challan_no;
+		        $nestedData['cutlot_challan'] =$post->cutlot_challan;
 		        $nestedData['date'] =date('d/m/Y',strtotime($post->date));
 		        $nestedData['patla_name'] =$post->patla_name;
+		        $nestedData['item_name'] =$post->item_name;
+		        $nestedData['party_name'] =$post->party_name;
 		        $nestedData['total_pcs'] = $post->total_pcs;
 		        $nestedData['user_name'] =strtoupper($post->user_name);
 		        $nestedData['button'] =$button;
@@ -137,10 +135,9 @@ class  Devide extends CI_Controller {
     {
     	$data['page_title']="Devide";
     	$data['devide']=$this->General_model->get_row('devide','devide_id',$id);
-    	$cut=$this->db->query("SELECT SUM(total_pcs) as total_pcs FROM `cut` WHERE party_id='".$data['devide']->party_id."' and item_id='".$data['devide']->item_id."' and use_for='1'")->row();
-    	$devide_pcs=$this->db->query("SELECT SUM(devide_pcs) as devide_pcs FROM `devide` WHERE party_id='".$data['devide']->party_id."' and item_id='".$data['devide']->item_id."' and devide_id != '".$id."'")->row();
-    	$data['total_pcs']=$cut->total_pcs-$devide_pcs->devide_pcs;
-    	$data['patla'] = $this->General_model->get_data('patla','status','*','1');
+    	$data['patla'] = $this->General_model->get_row('patla','patla_id',$data['devide']->patla_id);
+    	$data['party'] = $this->General_model->get_row('party','party_id',$data['devide']->party_id);
+    	$data['item'] = $this->General_model->get_row('item','item_id',$data['devide']->item_id);
     	$this->load->view('admin/controller/header');
 		$this->load->view('admin/controller/sidebar');
 		$this->load->view('admin/devide/edit',$data);
@@ -149,29 +146,17 @@ class  Devide extends CI_Controller {
     public function update()
     {
     	$this->General_model->auth_check();
-    	$lot_no=trim($this->input->post("lot_no"));
     	$devide_id=$this->input->post('devide_id');
     	$date = explode('/',$this->input->post('date')); 
     	$date =[$date[2],$date[1],$date[0]];
     	$date=implode("-", $date);
-    	$vahicle=strtoupper(trim($this->input->post("vahicle")));
-    	$vahicle_no=strtoupper(trim($this->input->post("vahicle_no")));
-    	$total_pcs=$this->input->post('total_pcs');
-    	$address=strtoupper(trim($this->input->post("address")));
-    	$patla_id=$this->input->post('patla');
-    	$pcs=$this->input->post('pcs');
-    	if(isset($date) && !empty($date) && isset($patla_id) && !empty($patla_id) && isset($pcs) && !empty($pcs) && isset($devide_id) && !empty($devide_id)){
-    		$lotno=
-    		$msg="Devide Update lotno ".$lot_no;
+    	$total_pcs=$this->input->post('total_pcs'); 
+    	if(isset($date) && !empty($date) && isset($total_pcs) && !empty($total_pcs) && isset($devide_id) && !empty($devide_id)){
+    		$msg="Devide Update id ".$devide_id;
 			$this->LogModel->simplelog($msg);
-    		$devide=['address'=>$address,
-    					'vahicle'=>$vahicle,
-    					'vahicle_no'=>$vahicle_no,
-    					'date'=>$date,
-    					'patla_id'=>$patla_id,
-    					'devide_pcs'=>$pcs,
+    		$devide=['date'=>$date,
     					'total_pcs'=>$total_pcs,
-    					'user_id'=>$_SESSION['auth_user_id'] ];
+    				];
     			$this->General_model->update('devide',$devide,'devide_id',$devide_id);
     			$sess_data = ['status'  => 'success',
     				            	'msg'  => 'Devide Updated' ];
@@ -188,8 +173,7 @@ class  Devide extends CI_Controller {
     {
     	$data['page_title']="Devide";
     	$data['devide']=$this->db->query("SELECT t1.*,t3.patla_name FROM devide as t1 LEFT JOIN patla as t3 ON t1.patla_id = t3.patla_id WHERE t1.devide_id='".$id."'")->row();
-    	$data['party']=$this->db->query("SELECT t1.party_id,t2.party_name,t3.item_name,t2.srt_name,t2.gst_number FROM devide as t1 LEFT JOIN party as t2 ON t1.party_id =t2.party_id LEFT JOIN item as t3 ON t1.item_id =t3.item_id where t1.challan_no='".$data['devide']->challan_no."'")->row();
-		
+    	$data['party']=$this->db->query("SELECT t1.party_id,t2.party_name,t3.item_name,t2.srt_name,t2.gst_number FROM devide as t1 LEFT JOIN party as t2 ON t1.party_id =t2.party_id LEFT JOIN item as t3 ON t1.item_id =t3.item_id where t1.devide_id='".$data['devide']->devide_id."'")->row();    	
     	$this->load->view('admin/controller/header');
 		$this->load->view('admin/controller/sidebar');
 		$this->load->view('admin/devide/invoice',$data);
@@ -202,7 +186,6 @@ class  Devide extends CI_Controller {
     		$devide=$this->General_model->delete('devide','devide_id',$id);
     		$msg="Devide Deleted id ".$id;
 			$this->LogModel->simplelog($msg);
-
     		$data['status']="success";
     		$data['msg']="Devide Deleted";
     	}else{
@@ -216,13 +199,8 @@ class  Devide extends CI_Controller {
     	$this->General_model->auth_check();
     	if(isset($id) && !empty($id)){
     		$data['status']="success";
-    		$cut_row=$this->General_model->get_row('cut','challan_no',$id);
-    		$party_id=$cut_row->party_id;
-    		$item_id=$cut_row->item_id;
-    		$cut_pcs=$cut_row->total_pcs;
-    		$cut_tpcs=$this->db->query("SELECT SUM(total_pcs) as total_pcs FROM `cut` WHERE party_id='".$party_id."' and item_id='".$item_id."' and challan_no ='".$id."'")->row();
-    		$total_pcs=((empty($cut_tpcs->total_pcs) && !isset($cut_tpcs->total_pcs))?0:$cut_tpcs->total_pcs);
-    		$data['flag']=['total_pcs'=>$total_pcs];
+    		$cut_row=$this->General_model->get_row('cut_lot','cutlot_id',$id);
+    		$data['data']=$cut_row;
     	}else{
     		$data['status']="error";
     		$data['msg']="Something is Worng";				
@@ -235,7 +213,7 @@ class  Devide extends CI_Controller {
         $party=$this->input->post('party');
         $item=$this->input->post('item');
         if(isset($party) && !empty($party) && isset($item) && !empty($item)){
-            $cut=$this->db->query("SELECT `challan_no` FROM `cut` WHERE `party_id`='".$party."' AND `item_id`='".$item."' AND `status`='1'");
+            $cut=$this->db->query("SELECT `cutlot_id`,`challan_no`,`pcs` FROM `cut_lot` WHERE `party_id`='".$party."' AND `item_id`='".$item."' AND `status`='1'");
            	$query=$cut->result();
             $data['challan_no']=$query;
             $data['status']="success";

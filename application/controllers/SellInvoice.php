@@ -364,81 +364,48 @@ class  SellInvoice extends CI_Controller {
 	    	$sell_product=$this->db->query("SELECT t1.*,t2.item_name,t2.hsn_code  FROM sell_product as t1 LEFT JOIN item as t2 ON t1.item_id = t2.item_id WHERE t1.sellinvoice_id='".$id."'")->result(); 
 	    	$party=$this->db->query("SELECT * from party WHERE party_id='".$sell_invoice->party_id."'")->row();
 	    	$image=base_url('assets/admin/images/bill.jpg');
-			$pdf->Image($image,0,0,210,0,'JPG');
+			$pdf->Image($image,0,0.5,210,0,'JPG');
 			$pdf->SetFont('Arial','',9);
-	    	$pdf->SetXY(45,41);
-			$pdf->MultiCell(150,5,ADDRESS2,0,'L'); 
-	    	$pdf->SetFont('Arial','',13);
-			$pdf->SetXY(70,34);
-			$pdf->Cell(40,5,ADDRESS1,0,1,'L');
+	    	$pdf->SetFont('Arial','',9);
+			$pdf->SetXY(39,30);
+			$pdf->Cell(40,5,ADDRESS1,0,1,'c');
 			$pdf->SetFont('Arial','B',11);
-			$pdf->SetXY(12,53);
+			$pdf->SetXY(12,44);
 			$pdf->Cell(40,5,ucfirst($sell_invoice->bill_type)." Memo",0,1,'L');
-			$pdf->SetXY(92,53);
-			$pdf->Cell(40,5,"TAX INVOICE",0,1,'L');
-			$pdf->SetXY(178,53);
-			$pdf->Cell(20,5,"Original",0,1,'L');
-			$pdf->SetFont('Arial','B',10);
-			$pdf->SetXY(12,62);
-			$pdf->Cell(15,5,"M/s :",0,1,'L');
-			$pdf->SetXY(12,83);
-			$pdf->Cell(20,5,"State :",0,1,'L');
-			$pdf->SetXY(12,90);
-			$pdf->Cell(40,5,"GST No :",0,1,'L');
-			$pdf->SetFont('Arial','',10);
-			$pdf->SetXY(23,62);
+			
+		
+			$pdf->SetFont('Arial','',9);
+			$pdf->SetXY(27,50.5);
 			$city_code=((isset($party->city_code) && !empty($party->city_code))?" - ".$party->city_code:"");
-			$pdf->MultiCell(95,5, strtoupper($party->party_name)."\n". strtoupper($party->address).", ".strtoupper($party->city),0,'L');
+			$pdf->MultiCell(96,5, strtoupper($party->party_name)."\n". strtoupper($party->address).", ".strtoupper($party->city),0,'L');
+		
 			/*invoice No*/
-			$pdf->SetFont('Arial','B',10);
-			$pdf->SetXY(125,62);
-			$pdf->Cell(40,5,"Invoice No :",0,1,'L');
-			$pdf->SetFont('Arial','',10);
-			$pdf->SetXY(155,62);
-			$pdf->Cell(20,5,"OC /".$sell_invoice->invoice_no,0,1,'L');
-			$pdf->SetFont('Arial','B',10);
-			$pdf->SetXY(125.2,72);
-			$pdf->Cell(40,5,"Date :",0,1,'L');
-			$pdf->SetFont('Arial','',10);
-			$pdf->SetXY(155,72);
+			
+			$pdf->SetFont('Arial','',9);
+			$pdf->SetXY(155,50.5);
+			$pdf->Cell(20,5,$sell_invoice->invoice_no,0,1,'L');
+		
+			$pdf->SetFont('Arial','',9);
+			$pdf->SetXY(155,56.5);
 			$pdf->Cell(20,5,date('d/m/Y',strtotime($sell_invoice->date)),0,1,'L');
-			$pdf->SetXY(30,90);
+			$pdf->SetXY(35,76);
 			$pdf->Cell(20,5,strtoupper($party->gst_number),0,1,'L');
 			$state_code=((isset($party->state_code) && !empty($party->state_code))?" - ".$party->state_code:"");
-			$pdf->SetXY(30,83);
+			$pdf->SetXY(41,70);
 			$pdf->Cell(20,5,strtoupper($sell_invoice->state),0,1,'L');
 			$pdf->SetFont('Arial','B',9);
-			$pdf->SetXY(12,207);
+			$pdf->SetXY(12,220);
 			$pdf->Cell(20,5,"GST No : ".strtoupper(GST_NO),0,1,'L');
-			$pdf->SetXY(12,213);
-			$pdf->Cell(20,5,"Bank Name : ",0,1,'L');
-			$pdf->SetXY(56,213);
-			$pdf->Cell(20,5,"Branch : ",0,1,'L');
-			$pdf->SetXY(12,218);
-			$pdf->Cell(20,5,"Bank A/c No. : ",0,1,'L');
-			$pdf->SetXY(12,223);
-			$pdf->Cell(20,5,"RTGS/IFSC Code : ",0,1,'L');
-			$pdf->SetXY(12,231);
-			$pdf->Cell(20,5,"Bill Amount : ",0,1,'L');
-			$pdf->SetXY(12,247);
-			$pdf->Cell(20,5,"Note : ",0,1,'L');
-			$pdf->SetXY(138.5,207);
-			$pdf->Cell(20,5,"Sub Total : ",0,1,'L');
-			$pdf->SetXY(138.5,216.4);
-			$pdf->Cell(20,5,"Taxable Amount : ",0,1,'L');
-			$pdf->SetXY(138.5,238.5);
-			$pdf->Cell(20,5,"Round of : ",0,1,'L');
-			$pdf->SetXY(138.5,247.5);
-			$pdf->Cell(20,5,"Grand Total : ",0,1,'L');
-			$pdf->SetXY(162,207);
+			
+			$pdf->SetXY(162,208);
 			$pdf->Cell(37,5,number_format($sell_invoice->subtotal,2),0,1,'R');
-			$pdf->SetXY(170,216.4);
+			$pdf->SetXY(170,214.4);
 			$pdf->Cell(29,5,number_format($sell_invoice->subtotal,2),0,1,'R');
 			if($sell_invoice->gst_type==2){
-				$pdf->SetXY(138.5,227);
-				$pdf->Cell(20,5,"IGST   3.0%",0,1,'L');
+				$pdf->SetXY(150,227);
+				$pdf->Cell(20,5,"IGST   5.0%",0,1,'L');
 				$pdf->SetXY(170,227);
-				$pdf->Cell(29,5,number_format($sell_invoice->all_gst),0,1,'R');
+				$pdf->Cell(29,5,number_format($sell_invoice->all_gst,2),0,1,'R');
 			}else{
 				$pdf->SetXY(138.5,223);
 				$pdf->Cell(20,5,"SGST   1.5%",0,1,'L');
@@ -451,37 +418,33 @@ class  SellInvoice extends CI_Controller {
 			}
 			$pdf->SetXY(170,238.5);
 			$pdf->Cell(29,5,number_format(($sell_invoice->grandtotal-($sell_invoice->subtotal+$sell_invoice->all_gst))),0,1,'R');
-			$pdf->SetXY(170,247.5);
-			$pdf->Cell(29,5,number_format($sell_invoice->grandtotal),0,1,'R');
-			$pdf->SetXY(10,97);
-			$pdf->Cell(12,5,"Sr No",0,1,'C');
-			$pdf->SetXY(24,97);
-			$pdf->Cell(82,5,"Particular",0,1,'C');
-			$pdf->SetXY(103,97);
-			$pdf->Cell(20,5,"HSN",0,1,'C');
-			$pdf->SetXY(120,97);
-			$pdf->Cell(26,5,"Qty (in kg)",0,1,'C');
-			$pdf->SetXY(146,97);
-			$pdf->Cell(28,5,"Rate / kg",0,1,'C');
-			$pdf->SetXY(174,97);
-			$pdf->Cell(26,5,"Amount",0,1,'C');
+			$pdf->SetXY(170,255);
+			$pdf->Cell(29,5,number_format($sell_invoice->grandtotal,2),0,1,'R');
+			
 			/*item*/
 			$pdf->SetFont('Arial','',9);
 			$i=1;
 			$j=0;		
 			foreach ($sell_product as $sell_product) {
 				if($i<5){
-					$pdf->SetXY(10,105+$j);
-					$pdf->Cell(12,5,$i,0,1,'C');
-					$pdf->SetXY(24,105+$j);
+					
+					$pdf->SetXY(20,93+$j);
 					$pdf->MultiCell(79.5,5,$sell_product->item_name,0,'L');
-					$pdf->SetXY(106,105+$j);
+					$pdf->SetXY(40,93+$j);
+					$pdf->MultiCell(79.5,5,$sell_product->Description,0,'L');
+					$pdf->SetXY(100,93+$j);
 					$pdf->MultiCell(13,5,$sell_product->hsn_code,0,'C');
-					$pdf->SetXY(121,105+$j);
+					$pdf->SetXY(117,93+$j);
+					$pdf->MultiCell(13,5,$sell_product->cut_mtr,0,'C');
+					$pdf->SetXY(123,93+$j);
 					$pdf->Cell(24,5,$sell_product->quality,0,1,'C');
-					$pdf->SetXY(147,105+$j);
+					$pdf->SetXY(138,93+$j);
+					$pdf->Cell(24,5,$sell_product->t_mtr,0,1,'C');
+					$pdf->SetXY(153,93+$j);
 					$pdf->Cell(27,5,number_format($sell_product->price,2),0,1,'C');
-					$pdf->SetXY(176,105+$j);
+					$pdf->SetXY(165,93+$j);
+					$pdf->Cell(27,5,number_format($sell_product->igst_p,2),0,1,'C');
+					$pdf->SetXY(180,93+$j);
 					$pdf->Cell(23,5,$sell_product->total,0,1,'C');
 					$j=$j+15;
 				}else{
@@ -491,20 +454,18 @@ class  SellInvoice extends CI_Controller {
 			/*end item*/
 			$g_total=$this->General_model->getIndianCurrency($sell_invoice->grandtotal);
 			$pdf->SetFont('Arial','',9);			
-			$pdf->SetXY(12,237);
+			$pdf->SetXY(40,253);
 			$pdf->MultiCell(125,5,$g_total,0,'L');
-			$pdf->SetFont('Arial','',10);
-			$pdf->SetXY(35,213);
+			$pdf->SetFont('Arial','',9);
+			$pdf->SetXY(45,228.5);
 			$pdf->Cell(40,5,"ICICI BANK  ",0,1,'L');
-			$pdf->SetXY(72,213);
-			$pdf->Cell(40,5,"Ranchhodnagar, Rajkot  ",0,1,'L');
-			$pdf->SetXY(42,218);
+			$pdf->SetXY(45,234);
 			$pdf->Cell(40,5,"239605500869 ",0,1,'L');
-			$pdf->SetXY(42,223);
+			$pdf->SetXY(45,239);
 			$pdf->Cell(40,5,"ICIC0002396",0,1,'L');
 			$pdf->SetFont('Arial','B',7);
-			$pdf->SetXY(157,255);
-			$pdf->Cell(40,5,"FOR OM CASTING",0,0,'L');
+			$pdf->SetXY(157,267);
+			$pdf->Cell(40,5,"FOR Varni Print",0,0,'L');
 
 			/*samksamsa
 	    	$pdf->AddPage();

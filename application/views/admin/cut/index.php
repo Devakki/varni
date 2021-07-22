@@ -19,8 +19,7 @@
                        <thead>
                        <tr>
                            <th>#</th>
-                           <th>LOT NO</th>
-                           <th>C NO</th>
+                           <th>INV NO</th>
                            <th>DATE</th>
                            <th>NAME</th>
                            <th>PARTY</th>
@@ -41,8 +40,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        //Buttons examples
-        <?php if($_SESSION['auth_role_id']=="1"): ?>
         var table = $('#datatable-buttons').DataTable({
             processing: true,
             serverSide: true,
@@ -54,7 +51,6 @@
             "order": [[0, "DESC" ]],
             columns: [      
                         { "data": "sr_no" },
-                        { "data": "lot_no" },
                         { "data": "challan_no" },
                         { "data": "date"},
                         { "data": "name" },
@@ -65,41 +61,11 @@
                         { "data": "total_fent"},
                         { "data": "button"},
                     ],
-            columnDefs: [{ "targets": [10],"orderable": false}],
+            columnDefs: [{ "targets": [9],"orderable": false}],
             buttons: ['print','copy', 'excel', 'colvis'],
             lengthChange: false,
             dom: 'Blfrtip'
-        });
-        <?php else :?>
-        var table = $('#datatable-buttons').DataTable({
-            processing: true,
-            serverSide: true,
-            order: [],
-            ajax: {
-                   "url": "<?php echo base_url('Cut/getLists/'); ?>",
-                   "type": "POST"
-               },
-            "order": [[0, "DESC" ]],
-            columns: [      
-                        { "data": "sr_no" },
-                        { "data": "lot_no" },
-                        { "data": "challan_no" },
-                        { "data": "date"},
-                        { "data": "name" },
-                        { "data": "party_name" },
-                        { "data": "use_for" },
-                        { "data": "item_name" },
-                        { "data": "total_pcs" },
-                        { "data": "purchase_mtr" },
-                        { "data": "total_fent"},
-                        { "data": "button"},
-                    ],
-            columnDefs: [{ "targets": [12],"orderable": false}],
-            buttons: ['print','copy', 'excel', 'colvis'],
-            lengthChange: false,
-            dom: 'Blfrtip'
-        });
-        <?php endif; ?>
+        });        
         table.buttons().container()
                 .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
         $('#datatable-buttons').on('click', '[data-id=delete]', function () {                        

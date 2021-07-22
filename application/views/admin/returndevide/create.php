@@ -20,67 +20,105 @@
         <div class="row">
             <div class="col-xs-12 col-md-12">
                 <div class="card-box">
-                    <h4 class="m-t-0 header-title text-center">Add ReturnDevide</h4><br>
+                    <h4 class="m-t-0 header-title text-center">Add Return Devide</h4><br>
                     <form action="<?php echo base_url('ReturnDevide/create');?>" method="post"  class="form-horizontal" >
-                        <div class="row">         
-                            <div class="col-md-8 ofset-2">
+                          <div class="row">         
+                            <div class="col-md-4">
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">PATLA ACCOUNT<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <select name="patla" id="patla" class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
-                                       <?php foreach ($patla as $key => $value): ?>
-                                                      <option value="<?php echo $value->patla_id; ?>"><?php echo $value->patla_name; ?></option>
-                                        <?php endforeach; ?>
-                                      </select>
-                                  </div>
+                                <label for="name" class="col-4 col-form-label">PATLA <span class="text-danger">*</span></label>
+                                <div class="col-8">
+                                  <select name="patla" id="patla" class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                   <?php foreach ($patla as $key => $value): ?>
+                                    <option value="<?php echo $value->patla_id; ?>"><?php echo $value->patla_name; ?></option>
+                                  <?php endforeach; ?>
+                                </select>
                               </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">DATE<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <input placeholder="dd/mm/yy" type="text" name="date" required="" class="form-control datepicker-autoclose" autocomplete="off" value="<?php echo date('d/m/Y'); ?>">
-                                  </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group row">
+                              <label for="name" class="col-4 col-form-label">DATE<span class="text-danger">*</span></label>
+                              <div class="col-8">
+                                <input placeholder="dd/mm/yy" type="text" name="date" required="" class="form-control datepicker-autoclose" autocomplete="off" value="<?php echo date('d/m/Y'); ?>">
                               </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">PARTY<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <select name="party" id="party" class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
-                                        <option value="0">None</option>
-                                        <?php foreach ($party as $key => $value): ?>
-                                            <option value="<?php echo $value->party_id; ?>"><?php echo $value->party_name; ?></option>
-                                        <?php endforeach; ?>
-                                      </select>
-                                  </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group row">
+                              <label for="name" class="col-4 col-form-label">TOTAL PCS<span class="text-danger">*</span></label>
+                              <div class="col-8">
+                                  <input placeholder="TOTAL PCS" type="text"  required="" class="form-control xTotalPis" autocomplete="off" readonly >
                               </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">Item<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <select name="item" class="xItem" id="item">
-                                      </select>
-                                  </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group row">
+                              <label for="name" class="col-4 col-form-label">PARTY<span class="text-danger">*</span></label>
+                              <div class="col-8">
+                                <select name="party" id="party" class="xParty" data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                  <option value="0">None</option>
+                                  <?php foreach ($party as $key => $value): ?>
+                                    <option value="<?php echo $value->party_id; ?>"><?php echo $value->party_name; ?></option>
+                                  <?php endforeach; ?>
+                                </select>
                               </div>
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">Challan<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <select name="challan" class="sChallan" id="challan">
-                                      </select>
-                                  </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group row">
+                              <label for="name" class="col-4 col-form-label">ITEM<span class="text-danger">*</span></label>
+                              <div class="col-8">
+                                <select name="item" class="xItem" id="item">
+                                </select>
                               </div>
-                              
-                              <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">TOTAL PCS<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <input placeholder="TOTAL PCS" type="text" name="total_pcs" required="" class="form-control xtotalPcs" autocomplete="off" >
-                                  </div>
-                              </div>
-                          </div>                 
-                         
-                      </div>
-                     
-                      <div class="form-group text-center m-t-20 m-b-20">
-                        <button class="btn btn-primary waves-effect waves-light" onclick="return validateForm()" type="submit">
-                          Add
-                        </button>
-                      </div>
+                            </div>
+                          </div>                                            
+                        </div>
+                        <div class="row m-t-50">
+                            <div class="col-lg-12">
+                                <div style="overflow-x:auto; ">
+                                  <table class="table" id="myTable" style="min-width: 1080px;">
+                                    <thead>
+                                        <tr>
+                                          <th scope="col" width="25%">CHALLAN</th>
+                                          <th scope="col">PCS</th>
+                                          <th scope="col">MISS PRINT</th>
+                                          <th scope="col">RATE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+                                        <tr id="xAppendNode">
+                                          <td>
+                                            <select name="challan" class="sChallan" id="challan" data-parsley-min="1" data-parsley-min-message="Select AtList One">
+                                            </select>
+                                          <td>
+                                            <input placeholder="PCS" type="text" name="total_pcs" required="" class="form-control xtotalPcs" autocomplete="off" >
+                                          </td>
+                                          <td>
+                                            <input placeholder="MISS PRINT" type="text" name="miss_print" required="" class="form-control vMissPrint" autocomplete="off" >
+                                          </td>
+                                          <td>
+                                            <input placeholder="RATE" type="text" name="rate" required="" class="form-control vRate" autocomplete="off" >
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                            </div>
+                            <div class="offset-md-6 col-md-6 mt-5">
+                                <div class="form-group row">
+                                    <label for="name" class="col-4 col-form-label">TOTAL AMOUNT</label>
+                                    <div class="col-8">
+                                        <input placeholder="TOTAL AMOUNT"  type="number" step="any" name="total_rate" class="form-control xVtRate" required readonly autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center m-t-20 m-b-20">
+                          <button class="btn btn-primary waves-effect waves-light" onclick="return validateForm()" type="submit">
+                            Add
+                          </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -88,83 +126,86 @@
     </div> 
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
+  $(document).ready(function() {
     $('form').parsley();
     $('select').select2();
-    $('body').on('keyup','.xPcs', function(e){
-          $('.xCTotal_pcs').val($(this).val()); 
-    });
     $('body').on('change','.xParty', function(e){
-        var id = $(this).val(); 
-        $('.xItem').empty();
-        $(this).focus();
-        $("select").select2();
-        $.ajax({                                            
-          url:"<?php echo base_url('cut/get_item/') ?>"+id+"",
-          type: "POST",
-          success: function(result){
-            var result  = JSON.parse(result);                            
-            if(result.status=="success"){
-              $('.xItem').append('<option></option>');
-              $.each(result.item,function(key, value)
-              {               
-                $('.xItem').append('<option value=' + value[0] + '>' + value[1] + '</option>');
-              });
-            }
+      var id = $(this).val(); 
+      $('.xItem').empty();
+      $(this).focus();
+      $("select").select2();
+      $('.sChallan').empty();   
+      $.ajax({                                            
+        url:"<?php echo base_url('cut/get_item/') ?>"+id+"",
+        type: "POST",
+        success: function(result){
+          var result  = JSON.parse(result);                            
+          if(result.status=="success"){
+            $('.xItem').append('<option value="0">None</option>');
+            $.each(result.item,function(key, value)
+            {               
+              $('.xItem').append('<option value=' + value[0] + '>' + value[1] + '</option>');
+            });
           }
-        });
+        }
+      });
     })
+    $('body').on('keyup','.xtotalPcs,.vMissPrint,.vRate', function(e){
+      calculate();
+    });
     $('body').on('change','.xItem', function(e){
-        var item=$(this).val(); 
-        $("select").select2();
-        $(this).focus();
-        var party=$(".xParty").val();
-        $.ajax({                                            
-            url:"<?php echo base_url('returndevide/get_challan/') ?>",
-            type: "POST",
-            data: {item: item, party: party},
-            success: function(result){
-                var result  = JSON.parse(result);                                
-                if(result.status=="success"){
-                  $('.sChallan').append('<option></option>');           
-                  $.each(result.challan_no,function(key,value)
-                  {
-                    $('.sChallan').append('<option value=' + value.challan_no + '>' + value.challan_no + '</option>');
-                  });             
-                }
-            }
-        });
+      var item=$(this).val(); 
+      $("select").select2();
+      $(this).focus();
+      $('.sChallan').empty();
+      var party=$(".xParty").val();
+      $.ajax({                                            
+        url:"<?php echo base_url('ReturnDevide/get_challan/') ?>",
+        type: "POST",
+        data: {item: item, party: party},
+        success: function(result){
+          var result  = JSON.parse(result);                                
+          if(result.status=="success"){
+            $('.sChallan').append('<option value="0">None</option>');           
+            $.each(result.challan_no,function(key,value)
+            {
+              $('.sChallan').append('<option value=' + value.devide_id + '>' + value.cutlot_challan + '</option>');
+            });             
+          }
+        }
+      });
     });
     $('body').on('change','.sChallan', function(e){
-        var lot_no=$(this).val();
-        $.ajax({                                            
-              url:"<?php echo base_url('ReturnDevide/totalpcs/')?>"+lot_no+"",
-              type: "POST",
-              success: function(result){
-                  var result  = JSON.parse(result);                                
-              if(result.status=="success"){
-                    $('.xtotalPcs').val((result.flag.total_pcs));
-                  }
-                } 
-            });
-        });
+      var id=$(this).val();
+      $.ajax({                                            
+        url:"<?php echo base_url('ReturnDevide/totalpcs/')?>"+id+"",
+        type: "POST",
+        success: function(result){
+          var result  = JSON.parse(result);                                
+          if(result.status=="success"){
+            $('.xtotalPcs').val((result.data.total_pcs));
+            $('.xTotalPis').val((result.data.total_pcs));
+            $('.vMissPrint').val('0');
+          }
+        } 
+      });
     });
+  });
   function validateForm(){
-     var Lot_pcs=parseInt($('.xtotalPcs').val());
-          if(Lot_pcs==0){
-            $.toast({
-                      heading: 'Oh snap!',
-                      text: 'Pcs is zero',
-                      position: 'top-right',
-                      loaderBg: '#bf441d',
-                      icon: 'error',
-                      hideAfter: 3000,
-                      stack: 1
-              });
-              return false;
-          }
-          else{
-            return true;
-          }
+      var t_total_pcs= parseInt($('.xTotalPis').val());
+      var t_devide_pcs= parseInt($('.xtotalPcs').val());
+      var t_miss_pcs=parseInt($('.vMissPrint').val());
+      if(t_total_pcs >= (t_devide_pcs + t_miss_pcs) ){
+        return true;
+      }
+      swal("error","TOTAL PCS GRATHER THEN PCS","warning","#4fa7f3");
+      return false;
+  }
+  function calculate(){
+    var pcs=parseFloat($('.xtotalPcs').val());
+    var rate=parseFloat($('.vRate').val());
+    var total=pcs*rate;
+    total=total.toFixed(1);
+    $('.xVtRate').val(total);
   }
 </script> 

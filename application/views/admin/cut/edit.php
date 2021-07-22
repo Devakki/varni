@@ -28,6 +28,7 @@
                                   <label for="name" class="col-4 col-form-label">NAME<span class="text-danger">*</span></label>
                                   <div class="col-8">
                                       <input placeholder="NAME" type="text" name="name" required="" class="form-control" autocomplete="off" value="<?php echo $cut->name; ?>">
+                                      <input  type="hidden" name="cut_id" required="" value="<?php echo $cut->id_cut; ?>">
                                   </div>
                               </div>
                               <div class="form-group row">
@@ -56,14 +57,7 @@
                               </div>
                           </div>
                           <div class="col-md-4">
-                              <div class="form-group row">
-                                  <label for="lot_no" class="col-4 col-form-label">LOT NO<span class="text-danger">*</span></label>
-                                  <div class="col-8">
-                                      <input type="number" name="lot_no" required="" class="form-control" readonly value="<?php echo $cut->lot_no; ?>">
-                                      <input type="hidden" name="cut_id" value="<?php echo $cut->id_cut; ?>">
-                                  </div>
-                              </div>
-                              
+                              <input placeholder="TOTAL STOCK MTR" type="number" name="t_stock_mtr" required="" value="<?= $stock_mtr ?>" class="form-control tStockMtr" readonly>
                           </div>
                       </div>
                       <div class="row m-t-50">
@@ -90,11 +84,9 @@
                                         <input type="number" name="p_mtr[]" class="form-control sPMeter" step="any" placeholder="PURCHASE MTR" required readonly value="<?php echo $value->p_mtr;?>">
                                         <input type="hidden" name="cutlot_id[]" value="<?php echo $value->cutlot_id;?>"  >
                                       </td>
-                                      
                                       <td>
                                         <input type="number" step="any" name="pcs[]" class="form-control sPcs" placeholder="PCS" required value="<?php echo $value->pcs;?>" >
                                       </td>
-                                      
                                       <td>
                                         <input type="number" step="any" name="fent[]" class="form-control sFent"  placeholder="FENT" required  value="<?php echo $value->fent;?>"  data-parsley-min="0" data-parsley-min-message="Min Value is 0" >
                                       </td>
@@ -112,20 +104,18 @@
                                       <td>
                                         <input type="number" name="p_mtr[]" class="form-control sPMeter" step="any" placeholder="PURCHASE MTR" required readonly >
                                       </td>
-                                     
                                       <td>
                                         <input type="number" step="any" name="pcs[]" class="form-control sPcs" placeholder="PCS" required >
                                       </td>
-                                    
                                       <td>
-                                        <input type="number" step="any" name="fent[]" class="form-control sFent"  placeholder="FENT" required readonly  data-parsley-min="0" data-parsley-min-message="Min Value is 0" >
+                                        <input type="number" step="any" name="fent[]" class="form-control sFent"  placeholder="FENT" required   data-parsley-min="0" data-parsley-min-message="Min Value is 0" >
                                       </td>
                                       <td>
                                         <button type="button" class="btn btn-icon waves-effect waves-light btn-danger btn-sm btn-remove "><i class=" fa fa-minus"></i></button>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td colspan="8">
+                                      <td colspan="4">
                                       </td>
                                       <td>
                                         <button type="button" class="btn waves-effect waves-light btn-secondary btn-add btn-sm"> <i class="fa fa-plus"></i> </button>
@@ -135,13 +125,11 @@
                                 </table>
                               </div>
                           </div>
-                          
                           <div class="offset-md-8 col-md-4">
-                             
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">TOTAL P MTR</label>
                                   <div class="col-8">
-                                      <input placeholder="TOTAL P MTR"  type="number" step="any" name="tp_mtr" class="form-control xPMtr" required readonly autocomplete="off" value="<?php echo $cut->purchase_mtr;?>">
+                                      <input placeholder="TOTAL P MTR"  type="number" step="any" name="tp_mtr" class="form-control xPMtr" required readonly autocomplete="off" value="<?php echo $cut->total_purchase_mtr;?>">
                                   </div>
                               </div>
                               <div class="form-group row">
@@ -159,7 +147,7 @@
                           </div>
                       </div>
                       <div class="form-group text-center m-t-20 m-b-20">
-                        <button class="btn btn-primary waves-effect waves-light" type="submit">
+                        <button class="btn btn-primary waves-effect waves-light" onclick="return validateForm()" type="submit">
                           Update
                         </button>
                       </div>
@@ -195,7 +183,7 @@ $(document).ready(function() {
             }
         });
     });
-    $('body').on('keyup','.sPcs', function(e){
+    $('body').on('keyup','.sPcs,.sFent', function(e){
         tr=$(this).parents('tr');
         calculate_obj(tr);
         calculate_meter();
@@ -240,10 +228,19 @@ function calculate_meter(){
     });
     $('.xTotal_pcs').val(sPcs);
     var sFent  =0;
-    $('.sFent ').each(function(){
+    $('.sFent').each(function(){
         sFent   += parseFloat($(this).val());        
     });
     $('.xTemp_Meter').val(sFent.toFixed(2));
     $('.xGPcs_value').val((sVlaue*5.5).toFixed(2));
+  }
+  function validateForm(){
+      var t_stock_mtr=$('.tStockMtr').val();
+      var t_cut_mtr=$('.xPMtr').val();
+      if(t_stock_mtr+1 >= t_cut_mtr ){
+        return true;
+      }
+      swal("error","PURCHSE MTR NOT AVIALABLE","warning","#4fa7f3");
+      return false;
   }
 </script> 

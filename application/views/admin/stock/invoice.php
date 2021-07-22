@@ -88,7 +88,7 @@
                       </div>
                    </div>
                    <div class="row m-t-20">
-                        <div class="col-md-4">
+                        <div class="offset-md-8 col-md-4">
                           <table class="table">
                              
                               <tr>

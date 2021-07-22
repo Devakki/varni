@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class  Stock extends CI_Controller {
 	function __construct() {
-
         parent::__construct();
         $this->load->helper('url');
         $this->load->database();
@@ -49,7 +48,6 @@ class  Stock extends CI_Controller {
 		$t_bala=trim($this->input->post("t_bala"));
 		$t_mtr=trim($this->input->post("t_mtr"));
 		if(isset($party) && !empty($party) && isset($challan_no) && !empty($challan_no) && isset($item) && !empty($item) && isset($date) && !empty($date) && isset($t_bala) && !empty($t_bala)){
-			
 		$partydetail=$this->General_model->get_row('party','party_id',$party);
 		$detail=['party_id'=>$party,
 					'challan_no'=>$challan_no,
@@ -65,9 +63,7 @@ class  Stock extends CI_Controller {
 					'user_id'=>$_SESSION['auth_user_id'],
 					'status'=>'1',
 					'created_at'=>date("Y-m-d h:i:s")];
-				$stock = $this->General_model->addid('stock',$detail);
-				$flag = ['challan_no'=>$challan_no,'party_id'=>$party];
-				$flagadd = $this->General_model->add('flag',$flag);
+				$stock = $this->General_model->addid('stock',$detail);				
 				$i=0;
 				$msg="Stock insert id ".$stock;
 				$this->LogModel->simplelog($msg);

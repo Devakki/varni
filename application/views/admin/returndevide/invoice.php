@@ -34,7 +34,7 @@
                             <tbody>
                               <tr>
                                   <td style="width: 66%">
-                                    <h1 class="h2-job text-center"><span class="bg-dark text-white" style="padding: 0 20px;">DEVIDE JOB WORK</span></h1>
+                                    <h1 class="h2-job text-center"><span class="bg-dark text-white" style="padding: 0 20px;">RETURN DEVIDE JOB WORK</span></h1>
                                   </td>
                                   <td style="width: 34%">
                                     <h3 class="m-b-0"><b><?php echo FULL_NAME; ?></b></h3>
@@ -65,11 +65,14 @@
                             <tbody>
                                 <tr>
                                     <td style="width: 33% " class="td-p">
-                                      <h4 class="header-title m-t-0"> <b>Challan No.</b> :  <?php echo $returndevide->challan_no; ?></h4>
+                                      <h4 class="header-title m-t-0"> <b>Challan No.</b> :  <?php echo $returndevide->devide_challan_no; ?></h4>
                                     </td>
-                                    <td style="width: 33% " class="td-p">
+                                    <td style="width: 33% " class="td-p text-center">
                                       <h4 class="header-title m-t-0"> <b>Date.</b> :   <?php echo date('d/m/Y', strtotime($returndevide->date)); ?></h4>
-                                    </td>         
+                                    </td>  
+                                    <td style="width: 33% " class="td-p text-right">
+                                      <h4 class="header-title m-t-0"> <b>Invoice No.</b> :  <?php echo $returndevide->challan_no; ?></h4>
+                                    </td>        
                                 </tr>
                             </tbody>
                         </table>
@@ -82,6 +85,8 @@
                                 <th class="header-title">PARTY</th>
                                 <th class="header-title">ITEM</th>
                                 <th class="header-title">PCS</th>
+                                <th class="header-title">MISS PCS</th>
+                                <th class="header-title">RATE</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -90,15 +95,24 @@
                                    <td class="header-title"><?php echo $party->party_name; ?></td>
                                    <td class="header-title"><?php echo $party->item_name; ?></td>
                                    <td class="header-title"><?php echo $returndevide->total_pcs;; ?></td>
-                                </tr>
-                                <tr>
-                                   <td colspan="3"  class="header-title">TOTAL PCS</td>
-                                   <td class="header-title"><?php echo $returndevide->total_pcs; ; ?></td>
+                                   <td class="header-title"><?php echo $returndevide->miss_pcs; ?></td>
+                                   <td class="header-title"><?php echo number_format($returndevide->rate,2); ?></td>
                                 </tr>
                             </tbody>
                       </table>        
                    </div>
-                   
+                    <div class="offset-md-8 col-md-4 mt-5">
+                        <table class="table">
+                            <tr>
+                                <th style="width:50%">TOTAL PCS</th>
+                                <td><?php echo $returndevide->total_pcs; ; ?></td>
+                            </tr>
+                            <tr>
+                                <th>G TOTAL</th>
+                                <td><?php echo number_format($returndevide->g_total,2); ?></td>
+                            </tr>
+                        </table>
+                    </div>
                </div>
            </div>
        </div>

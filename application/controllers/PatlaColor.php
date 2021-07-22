@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class PatlaColor extends CI_Controller {
-
     function __construct() {
         parent::__construct();
         $this->load->helper('url');
@@ -13,7 +12,6 @@ class PatlaColor extends CI_Controller {
         $this->load->model('LogModel');
         $this->General_model->auth_check();
         $this->General_model->auth_role2();
-        
     }
     public function index()
     {
@@ -27,8 +25,7 @@ class PatlaColor extends CI_Controller {
     public function get_addfrm()
     {
         $this->General_model->auth_check();
-        $data['page_title']="Patla Color entry";
-       
+        $data['page_title']="Patla Color";
         $data['color']=$this->General_model->get_data('color','status','*','1');
         $data['patla']=$this->General_model->get_data('patla','status','*','1');
         $this->load->view('admin/controller/header');
@@ -42,25 +39,26 @@ class PatlaColor extends CI_Controller {
         $date = explode('/',$this->input->post('date')); 
         $date =[$date[2],$date[1],$date[0]];
         $date=implode("-", $date);
+        $new_date=explode('-',$date); 
         $patla_id=$this->input->post('patla');
         $total_qty=$this->input->post('t_color_qty');
         $total=trim($this->input->post("total"));      
         if(isset($date) && !empty($date) &&  isset($patla_id) && !empty($patla_id) && isset($total_qty) && !empty($total_qty) && isset($total) && !empty($total)){
-           
+            $invoice_no=$this->PatlaColorModel->challan_no();
             $detail=[
+                'challan_no'=>$invoice_no['challan_no'],
                     'date'=>$date,
                     'patla_id'=>$patla_id,
-                    'month'=>date('m'),
-                    'year'=>date('Y'),
+                    'month'=>$new_date[1],
+                    'year'=>$new_date[0],
                     'total_qty'=>$total_qty,
                     'total'=>$total,
                     'status'=>'1',
                     'created_at'=>date("Y-m-d h:i:s")];
-            $patlacolor = $this->General_model->addid('patlacolor',$detail);
+            $patlacolor = $this->General_model->addid('patla_color',$detail);
             $msg="Patla Color insert id ".$patlacolor;
             $this->LogModel->simplelog($msg);
             $i=0;
-           
             foreach($this->input->post('color') as $lt)
             {
                 $color=$this->input->post('color')[$i];
@@ -68,20 +66,21 @@ class PatlaColor extends CI_Controller {
                 $rate=$this->input->post('rate')[$i];
                 $amount=$this->input->post('amount')[$i];
                 if(isset($color) && !empty($color) && isset($qty) && !empty($qty) && isset($rate) && !empty($rate)&& isset($amount) && !empty($amount)){
-                    $cut_lot=["patlacolor_id"=>$patlacolor,
+                    $patla_color_lot=["patlacolor_id"=>$patlacolor,
                                 "color_id"=> $color,
                                 "qty"=>$qty,
                                 'rate'=>$rate,
                                 "amount"=>$amount,
+                                'status'=>'1',
                                 "created_at"=>date("Y-m-d h:i:s")];
-                    $this->General_model->add('patlacolordetail',$cut_lot);
+                    $this->General_model->add('patla_color_lot',$patla_color_lot);
                 }
                 $i++;
             }
             $sess_data = ['status'  => 'success',
-                            'msg'  => 'Cut Added' ];
+                            'msg'  => 'Patla Color Added' ];
             $this->session->set_userdata($sess_data);       
-            redirect('PatlaColor/view_invoice/'.$cut);
+            redirect('PatlaColor/view_invoice/'.$patlacolor);
         }else{
             $sess_data = ['status'  => 'error',
                             'msg'  => 'Something Is Worng' ];
@@ -91,11 +90,14 @@ class PatlaColor extends CI_Controller {
     }
     public function getLists(){
         $columns = array( 
-                    0 =>'patlacolor_id', 
-                    1 => 'patla_name',
+                    0 =>'patlacolor_id',
+                    1 => 'challan_no',
                     2 => 'date',
-                    3 => 'total_qty',
-                    4 => 'total'
+                    3 => 'patla_name',
+                    4 => 'month',
+                    5 => 'year',
+                    6 => 'total_qty',
+                    7 => 'total'
                 );
         $limit = $this->input->post('length');
         $start = $this->input->post('start');
@@ -121,9 +123,8 @@ class PatlaColor extends CI_Controller {
                $button='<a href="'.base_url('PatlaColor/get_editfrm/').$post->patlacolor_id.'"><button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
                         <a href="'.base_url('PatlaColor/view_invoice/').$post->patlacolor_id.'"><button type="button" class="btn btn-custom waves-effect btn-sm  waves-light"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                         <button type="button" class="btn btn-danger waves-effect btn-sm waves-light" data-id="delete" data-value="'.$post->patlacolor_id.'"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                
-              
                 $nestedData['sr_no'] =$i;
+                $nestedData['challan_no'] =$post->challan_no;
                 $nestedData['patlacolor_id'] =$post->patlacolor_id;
                 $nestedData['patla_name'] =$post->patla_name;
                 $nestedData['month'] =$post->month;
@@ -147,87 +148,82 @@ class PatlaColor extends CI_Controller {
     }
     public function get_editfrm($id)
     {
-        $data['page_title']="Cut";
-        $data['cut']=$this->db->query("SELECT t1.*,t2.party_name,t3.item_name FROM cut as t1 LEFT JOIN party as t2 ON t1.party_id= t2.party_id LEFT JOIN item as t3 ON t1.item_id= t3.item_id where t1.id_cut='".$id."'")->row();
-        $data['challan']=$this->db->query("SELECT challan_no FROM `stock` WHERE `party_id`='".$data['cut']->party_id."' and item_id='".$data['cut']->item_id."' and status='1'")->result();
-        $data['cut_lot'] = $this->General_model->get_data('cut_lot','cut_id','*',$id);
+        $data['page_title']="Patla Color";
+        $data['patla_color']=$this->General_model->get_row('patla_color','patlacolor_id',$id);
+        $data['patla']=$this->General_model->get_row('patla','patla_id',$data['patla_color']->patla_id);
+        $data['color']=$this->General_model->get_data('color','status','*','1');
+        $data['patla_color_lot']=$this->General_model->get_data('patla_color_lot','patlacolor_id','*',$id);
         $this->load->view('admin/controller/header');
         $this->load->view('admin/controller/sidebar');
-        $this->load->view('admin/cut/edit',$data);
+        $this->load->view('admin/patlacolor/edit',$data);
         $this->load->view('admin/controller/footer');
     }
     public function update()
     {
         $this->General_model->auth_check();
-        $cut_id=$this->input->post('cut_id');
-        $name=ucwords(trim($this->input->post("name")));
+        $patlacolor_id = $this->input->post('patlacolor_id'); 
         $date = explode('/',$this->input->post('date')); 
         $date =[$date[2],$date[1],$date[0]];
         $date=implode("-", $date);
-        $tp_mtr=$this->input->post('tp_mtr');
-        $t_pcs=$this->input->post('t_pcs');     
-        $t_fent=$this->input->post('t_fent');   
-        if(isset($name) && !empty($name) &&  isset($date) && !empty($date)  && isset($tp_mtr) && !empty($tp_mtr) && isset($t_pcs) && !empty($t_pcs)){
-            $cut=$this->General_model->get_row('cut','id_cut',$cut_id);
+        $new_date=explode('-',$date); 
+        $patla_id=$this->input->post('patla');
+        $total_qty=$this->input->post('t_color_qty');
+        $total=trim($this->input->post("total"));      
+        if(isset($date) && !empty($date) &&  isset($patla_id) && !empty($patla_id) && isset($total_qty) && !empty($total_qty) && isset($total) && !empty($total) && isset($patlacolor_id) && !empty($patlacolor_id)){
             $detail=[
                     'date'=>$date,
-                    'name'=>$name,
-                    'purchase_mtr'=>$tp_mtr,
-                    'total_pcs'=>$t_pcs,
-                    'total_fent'=>$t_fent ];
-            $this->General_model->update('cut',$detail,'id_cut',$cut_id);
-            $msg="Cut Update Lotno  ".$cut->lot_no;
+                    'month'=>$new_date[1],
+                    'year'=>$new_date[0],
+                    'total_qty'=>$total_qty,
+                    'total'=>$total,
+                    ];
+            $patlacolor = $this->General_model->update('patla_color',$detail,'patlacolor_id',$patlacolor_id);
+            $msg="Patla Color Update id ".$patlacolor_id;
             $this->LogModel->simplelog($msg);
-           
             $i=0;
-            foreach($this->input->post('schallan_no') as $lt){
-                    $challan=$this->input->post('schallan_no')[$i];
-                    $p_mtr=$this->input->post('p_mtr')[$i];
-                    $pcs=$this->input->post('pcs')[$i];
-                    $fent=$this->input->post('fent')[$i];
-                    $cutlot_id=$this->input->post('cutlot_id')[$i];
-                    if( isset($cutlot_id) && !empty($cutlot_id) &&($challan) && !empty($challan) && isset($cut->id_cut) && !empty($cut->id_cut) && isset($pcs) && !empty($pcs) ){
-                        $cut_lot=[
-                                    'date'=>$date,                              
-                                    "p_mtr"=>$p_mtr,
-                                    'pcs'=>$pcs,
-                                    "fent"=>$fent];
-                        $this->General_model->update('cut_lot',$cut_lot,'cutlot_id',$cutlot_id);
-                    }elseif (isset($challan) && !empty($challan) && isset($cut->id_cut) && !empty($cut->id_cut) && isset($pcs) && !empty($pcs)) {
-                        $cut_lot=["cut_id"=>$cut->id_cut,
-                                    'date'=>$date,                              
-                                    "lot_no"=>$cut->lot_no,
-                                    "challan_no"=>$challan,
-                                    "party_id"=>$cut->party_id,
-                                    "item_id"=>$cut->item_id,
-                                    "p_mtr"=>$p_mtr,
-                                    'pcs'=>$pcs,
-                                    "fent"=>$fent,
-                                    "created_at"=>date("Y-m-d h:i:s")];
-                        $where =['party_id'=>$cut->party_id,'item_id'=>$cut->item_id,'challan_no'=>$challan];
-                        $update=['status'=>0,'lot_no'=>$cut->lot_no];
-                        $this->General_model->update_where('stock',$update,$where);
-                        $this->General_model->add('cut_lot',$cut_lot);
-                    }else{
-                    }
-                    $i++;
+            foreach($this->input->post('color') as $lt)
+            {
+                $color=$this->input->post('color')[$i];
+                $qty=$this->input->post('qty')[$i];
+                $rate=$this->input->post('rate')[$i];
+                $amount=$this->input->post('amount')[$i];
+                $lot_id=$this->input->post('lot_id')[$i];
+                if(isset($color) && !empty($color) && isset($qty) && !empty($qty) && isset($rate) && !empty($rate)&& isset($amount) && !empty($amount) && isset($lot_id) && !empty($lot_id)){
+                    $patla_color_lot=[
+                                "color_id"=> $color,
+                                "qty"=>$qty,
+                                'rate'=>$rate,
+                                "amount"=>$amount,
+                                ];
+                    $this->General_model->update('patla_color_lot',$patla_color_lot,'pcd_id',$lot_id);
+                }else{
+                    $patla_color_lot=["patlacolor_id"=>$patlacolor_id,
+                                "color_id"=> $color,
+                                "qty"=>$qty,
+                                'rate'=>$rate,
+                                "amount"=>$amount,
+                                'status'=>'1',
+                                "created_at"=>date("Y-m-d h:i:s")];
+                    $this->General_model->add('patla_color_lot',$patla_color_lot);
                 }
-                $sess_data = ['status'  => 'success',
-                                    'msg'  => 'Cut Updated' ];
-                $this->session->set_userdata($sess_data);       
-                redirect('Cut/view_invoice/'.$cut->id_cut);
-            }else{
-                $sess_data = ['status'  => 'error',
-                                'msg'  => 'Something Is Worng' ];
-                $this->session->set_userdata($sess_data);   
-                redirect('Cut/get_editfrm/'.$cut_id);
+                $i++;
+            }
+            $sess_data = ['status'  => 'success',
+                            'msg'  => 'Patla Color Updated' ];
+            $this->session->set_userdata($sess_data);       
+            redirect('PatlaColor/view_invoice/'.$patlacolor_id);
+        }else{
+            $sess_data = ['status'  => 'error',
+                            'msg'  => 'Something Is Worng' ];
+            $this->session->set_userdata($sess_data);   
+            redirect('PatlaColor/get_addfrm/');
         }
     }
     public function view_invoice($id)
     {
         $data['page_title']="Patla Color";
-        $data['patlacolor'] = $this->db->query("SELECT t1.*,t2.patla_name FROM patlacolor as t1 LEFT JOIN patla as t2 ON t1.patla_id = t2.patla_id WHERE patlacolor_id='".$id."'")->row();
-        $data['patlacolordetail'] =  $this->db->query("SELECT t1.*,t2.color_name FROM patlacolordetail as t1 LEFT JOIN color as t2 ON t1.color_id = t2.color_id ")->result();
+        $data['patla_color'] = $this->db->query("SELECT t1.*,t2.patla_name FROM patla_color as t1 LEFT JOIN patla as t2 ON t1.patla_id = t2.patla_id WHERE patlacolor_id='".$id."'")->row();
+        $data['patla_color_lot'] =  $this->db->query("SELECT t1.*,t2.color_name FROM patla_color_lot as t1 LEFT JOIN color as t2 ON t1.color_id = t2.color_id  WHERE patlacolor_id='".$id."'")->result();
         $this->load->view('admin/controller/header');
         $this->load->view('admin/controller/sidebar');
         $this->load->view('admin/patlacolor/invoice',$data);
@@ -237,111 +233,11 @@ class PatlaColor extends CI_Controller {
     {
         $this->General_model->auth_check();
         if(isset($id) && !empty($id)){
-            $cut=$this->General_model->get_row('cut','id_cut',$id);
-            $cut_lot=$this->General_model->get_data('cut_lot','cut_id','*',$id);
-            $msg=$msg="Cut delete Lotno  ".$cut->lot_no;
-            $this->LogModel->simplelog($msg);
-            foreach ($cut_lot as $cut_lot) {
-                $stock=$this->db->query("select * from stock where party_id='".$cut_lot->party_id."' and challan_no='".$cut_lot->challan_no."' and item_id='".$cut_lot->item_id."' and status='0'")->num_rows();
-                if($stock>0){
-                    $where=['party_id'=>$cut_lot->party_id,'challan_no'=>$cut_lot->challan_no,'item_id'=>$cut_lot->item_id];
-                    $this->General_model->update_where('stock',['status'=>1,'lot_no'=>NULL],$where);
-                }
-            }
             $this->General_model->delete('cut_lot','cutlot_id ',$id);
             $this->General_model->delete('balance','lot_no',$cut->lot_no);
-           
             $data['status']="success";
             $data['msg']="Lot No ".LOT.$cut->lot_no." Deleted";
             $this->General_model->delete('cut','id_cut',$id);
-        }else{
-            $data['status']="error";
-            $data['msg']="Something is Worng";              
-        }
-        echo json_encode($data);
-    }
-    public function get_item($id)
-    {
-        $this->General_model->auth_check();
-        if(isset($id) && !empty($id)){
-            $cut=$this->db->query("SELECT item_id FROM `stock` WHERE party_id='".$id."' GROUP BY `item_id`");
-            $count=$cut->num_rows();
-            if($count>0){
-                $query=$cut->result();
-                foreach ($query as $key=> $value) {
-                    $item=$this->General_model->get_row('item','item_id',$value->item_id);
-                    $items[]=[$item->item_id,$item->item_name];
-                }
-            $data['item']=$items;
-            $data['status']="success";
-            }else{
-                $data['status']="error";
-            }
-        }else{
-            $data['status']="error";
-        }
-        echo json_encode($data);
-    }
-    public function get_challan()
-    {   
-        $this->General_model->auth_check();
-        $party=$this->input->post('party');
-        $item=$this->input->post('item');
-        if(isset($party) && !empty($party) && isset($item) && !empty($item)){
-            $cut=$this->db->query("SELECT `challan_no` FROM `stock` WHERE `party_id`='".$party."' AND `item_id`='".$item."' AND `status`='1'");
-              $count=$cut->num_rows();
-            if($count>0){
-                $query=$cut->result();
-                
-            $data['challan_no']=$query;
-            $data['status']="success";
-            }else{
-                $data['status']="error";
-            }
-        }else{
-            $data['status']="error";
-        }
-        echo json_encode($data);
-    }
-    public function get_rowdetail()
-    {   
-        $this->General_model->auth_check();
-        $party=$this->input->post('party');
-        $item=$this->input->post('item');
-        $challan_no=$this->input->post('challan');
-        if(isset($party) && !empty($party) && isset($item) && !empty($item) && isset($challan_no) && !empty($challan_no)){
-            $cut=$this->db->query("SELECT `total_meter`,`t_bala` FROM `stock` WHERE `party_id`='".$party."' AND `item_id`='".$item."' AND `challan_no`='".$challan_no."' AND `status`='1'");
-            $count=$cut->num_rows();
-            if($count>0){
-                $query=$cut->row();
-            $data['row']=$query;
-            $data['status']="success";
-            }else{
-                $data['status']="error";
-            }
-        }else{
-            $data['status']="error";
-        }
-        echo json_encode($data);
-    }
-    public function check_lotno()
-    {
-        $this->General_model->auth_check();
-        $lot_no=$this->input->post('lot_no');
-        if(isset($lot_no) && !empty($lot_no)){
-            $check_lot=$this->db->query("SELECT * FROM `cut` WHERE `lot_no`='".$lot_no."'")->num_rows();
-            if($check_lot > 0){
-                $data['status']="error";
-                $data['msg']="Lot No Already Exist";
-            }else{
-                $check_lot=$this->db->query("SELECT * FROM `balance` WHERE `lot_no`='".$lot_no."'")->num_rows();
-                if($check_lot > 0){
-                    $data['status']="error";
-                    $data['msg']="Lot No Already Exist";
-                }else{
-                    $data['status']="success";
-                }
-            }
         }else{
             $data['status']="error";
             $data['msg']="Something is Worng";              

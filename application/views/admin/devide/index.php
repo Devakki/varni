@@ -19,15 +19,14 @@
                        <thead>
                        <tr>
                            <th>#</th>
+                           <th>INV NO</th>
                            <th>CHALLAN NO</th>
                            <th>DATE</th>
-                           <th>PATLA NAME</th>
-                           <th>TOTAL PCS</th>
-
-                           <?php if($_SESSION['auth_role_id']=="1"): ?>
-                           <th>ADD BY</th>
-                           <?php endif;?>
-                           
+                           <th>PATLA</th>
+                           <th>ITEM</th>
+                           <th>PARTY</th>
+                           <th>TOTAL PCS</th> 
+                           <th>ADD BY</th>                           
                            <th>ACTION</th>
                        </tr>
                        </thead>
@@ -41,7 +40,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        
         var table = $('#datatable-buttons').DataTable({
             processing: true,
             serverSide: true,
@@ -54,18 +52,20 @@
             columns: [      
                         { "data": "sr_no" },
                         { "data": "challan_no" },
+                        { "data": "cutlot_challan" },
                         { "data": "date"},
                         { "data": "patla_name" },
+                        { "data": "item_name" },
+                        { "data": "party_name" },
                         { "data": "total_pcs" },
                         { "data": "user_name" },
                         { "data": "button" }
                     ],
-            columnDefs: [{ "targets": [6],"orderable": false}],
+            columnDefs: [{ "targets": [9],"orderable": false}],
             buttons: ['print','copy', 'excel', 'colvis'],
             lengthChange: false,
             dom: 'Blfrtip'
         });
-      
         table.buttons().container()
                 .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
         $('#datatable-buttons').on('click', '[data-id=delete]', function () {                        

@@ -23,9 +23,9 @@
                     <h4 class="m-t-0 header-title text-center">Add Patla Color</h4><br>
                     <form action="<?php echo base_url('PatlaColor/create');?>" method="post"  class="form-horizontal" >
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">Patla<span class="text-danger">*</span></label>
+                                  <label for="name" class="col-4 col-form-label">PATLA<span class="text-danger">*</span></label>
                                   <div class="col-8">
                                       <select name="patla" id="patla" class="xPatla" data-parsley-min="1" data-parsley-min-message="Select AtList One">
                                         <option value="0">None</option>
@@ -35,15 +35,15 @@
                                       </select>
                                   </div>
                               </div>
+                            </div>
+                            <div class="col-md-6">
                               <div class="form-group row">
                                   <label for="name" class="col-4 col-form-label">DATE<span class="text-danger">*</span></label>
                                   <div class="col-8">
                                       <input placeholder="dd/mm/yy" type="text" name="date" required="" class="form-control datepicker-autoclose" autocomplete="off" value="<?php echo date('d/m/Y'); ?>">
                                   </div>
                               </div>
-                              
                           </div>
-                          
                       </div>
                       <div class="row m-t-50">
                           <div class="col-lg-12">
@@ -51,10 +51,10 @@
                                 <table class="table" id="myTable" style="min-width: 1080px;">
                                   <thead>
                                       <tr>
-                                        <th scope="col" width="15%">Color</th>
+                                        <th scope="col" width="25%">COLOR</th>
                                         <th scope="col">QTY</th>
-                                        <th scope="col">Rate</th>
-                                        <th scope="col">Amount</th>
+                                        <th scope="col">RATE</th>
+                                        <th scope="col">AMOUNT</th>
                                         <th scope="col"></th>
                                       </tr>
                                   </thead>
@@ -63,24 +63,24 @@
                                         <td>
                                         <select name="color[]" class="sColor">
                                        <?php foreach ($color as $key => $value): ?>
-                                                      <option value="<?php echo $value->color_id; ?>"><?php echo $value->color_name; ?></option>
+                                                      <option value="<?php echo $value->color_id; ?>"><?php echo ucwords($value->color_name); ?></option>
                                         <?php endforeach; ?>
                                       </select>
                                         <td>
                                           <input type="number" name="qty[]" class="form-control sQty" step="any" placeholder="Qty(gm)" required  >
                                         </td>
                                         <td>
-                                          <input type="number" step="any" name="rate[]" class="form-control sRate" placeholder="rate" required >
+                                          <input type="number" step="any" name="rate[]" class="form-control sRate" placeholder="RATE" required >
                                         </td>
                                         <td>
-                                          <input type="number" step="any" name="amount[]" class="form-control sAmount" readonly placeholder="Amount" required >
+                                          <input type="number" step="any" name="amount[]" class="form-control sAmount" readonly placeholder="AMOUNT" required >
                                         </td>
                                         <td>
                                           <button type="button" class="btn btn-icon waves-effect waves-light btn-danger btn-sm btn-remove "><i class=" fa fa-minus"></i></button>
                                         </td>
                                       </tr>
                                       <tr>
-                                        <td colspan="5">
+                                        <td colspan="4">
                                         </td>
                                         <td>
                                           <button type="button" class="btn waves-effect waves-light btn-secondary btn-add btn-sm"> <i class="fa fa-plus"></i> </button>
@@ -91,9 +91,8 @@
                               </div>
                           </div>
                           <div class="offset-md-8 col-md-4">
-                             
                               <div class="form-group row">
-                                  <label for="name" class="col-4 col-form-label">TOTAL Qty</label>
+                                  <label for="name" class="col-4 col-form-label">TOTAL QTY</label>
                                   <div class="col-8">
                                       <input placeholder="TOTAL COLOR"  type="number" step="any" name="t_color_qty" class="form-control xQty" required readonly autocomplete="off">
                                   </div>
@@ -123,69 +122,8 @@ $(document).ready(function() {
     let appendnode=$('#xAppendNode').html();
     let tablebody=$('#tableBody').html();
     var i=2;
-    $('body').on('change','.xpatla', function(e){
-        var id = $(this).val(); 
-        $('#tableBody').empty();      
-        $('#tableBody').html(tablebody);
-        $('.xItem').empty();
-        $(this).focus();
-        $("select").select2();
-        $.ajax({                                            
-          url:"<?php echo base_url('cut/get_item/') ?>"+id+"",
-          type: "POST",
-          success: function(result){
-            var result  = JSON.parse(result);                            
-            if(result.status=="success"){
-              $('.xItem').append('<option></option>');
-              $.each(result.item,function(key, value)
-              {               
-                $('.xItem').append('<option value=' + value[0] + '>' + value[1] + '</option>');
-              });
-            }
-          }
-        });
-    });
-    $('body').on('change','.xItem', function(e){
-        var item=$(this).val(); 
-        $('#tableBody').empty();      
-        $('#tableBody').html(tablebody);
-        $("select").select2();
-        $(this).focus();
-        var patla=$(".xpatla").val();
-        $.ajax({                                            
-            url:"<?php echo base_url('cut/get_challan/') ?>",
-            type: "POST",
-            data: {item: item, patla: patla},
-            success: function(result){
-                var result  = JSON.parse(result);                                
-                if(result.status=="success"){
-                  $('.sChallan').append('<option></option>');           
-                  $.each(result.challan_no,function(key,value)
-                  {
-                    $('.sChallan').append('<option value=' + value.challan_no + '>' + value.challan_no + '</option>');
-                  });             
-                }
-            }
-        });
-    });
-    $('body').on('change','.sChallan', function(e){
-        var id = $(this).val();
-        var tr =$(this).parents('tr'); 
-        var patla=$('.xpatla').val();
-        var item=$('.xItem').val(); 
-        $.ajax({                                            
-            url:"<?php echo base_url('cut/get_rowdetail/') ?>",
-            type: "POST",
-            data:{challan:id,patla:patla,item:item},
-            success: function(result){
-              var result  = JSON.parse(result);                                
-              if(result.status=="success"){ 
-                tr.find('.sPMeter').val(result.row.total_meter);
-                calculate_meter();            
-              }
-            }
-        });
-    });
+    
+    
     $('body').on('keyup','.sQty', function(e){
         tr=$(this).parents('tr');
         calculate_obj(tr);
@@ -195,35 +133,6 @@ $(document).ready(function() {
         tr=$(this).parents('tr');
         calculate_obj(tr);
         calculate_meter();
-    });
-    $('.xLotno').keyup(function() {
-      
-        let value=$(this).val();        
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('PatlaColor/check_lotno')?>",
-            data: {lot_no:value},
-            success: function(data){
-              var data  = JSON.parse(data);                                          
-              if(data.status=="success")
-              {
-                $("#exist").val("1");
-                $(".xLotno").removeClass("has-error"); 
-              }else
-              {
-                $("#exist").val("0");
-                $.toast({
-                        text: data.msg,
-                        position: 'top-right',
-                        loaderBg: '#bf441d',
-                        icon: 'error',
-                        hideAfter: 3000,
-                        stack: 1
-                });
-                $(".xLotno").addClass("has-error");               
-              }
-            } 
-        });
     });
     $('body').on('click','.btn-add', function(){
       let tr=$(this).parents('tr');
@@ -253,7 +162,6 @@ function calculate_obj($tr){
     $tr.find('.sAmount').val(amount);
 }
 function calculate_meter(){
-  
     var sQty=0
     $('.sQty').each(function(){
       sQty += parseFloat($(this).val());        
@@ -264,7 +172,5 @@ function calculate_meter(){
       sAmount  += parseFloat($(this).val());        
     });
     $('.xTotal').val(sAmount);
-   
-  }
-  
+}
 </script> 

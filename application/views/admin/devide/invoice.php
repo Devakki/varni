@@ -65,11 +65,14 @@
                             <tbody>
                                 <tr>
                                     <td style="width: 33% " class="td-p">
-                                      <h4 class="header-title m-t-0"> <b>Challan No.</b> :  <?php echo $devide->challan_no; ?></h4>
+                                      <h4 class="header-title m-t-0"> <b>Challan No.</b> :  <?php echo $devide->cutlot_challan; ?></h4>
                                     </td>
-                                    <td style="width: 33% " class="td-p">
+                                    <td style="width: 33% " class="td-p text-center">
                                       <h4 class="header-title m-t-0"> <b>Date.</b> :   <?php echo date('d/m/Y', strtotime($devide->date)); ?></h4>
-                                    </td>         
+                                    </td> 
+                                    <td style="width: 33% " class="td-p text-right">
+                                      <h4 class="header-title m-t-0"> <b>Invoice No.</b> :  <?php echo $devide->challan_no; ?></h4>
+                                    </td>        
                                 </tr>
                             </tbody>
                         </table>
@@ -91,14 +94,17 @@
                                    <td class="header-title"><?php echo $party->item_name; ?></td>
                                    <td class="header-title"><?php echo $devide->total_pcs;; ?></td>
                                 </tr>
-                                <tr>
-                                   <td colspan="3"  class="header-title">TOTAL PCS</td>
-                                   <td class="header-title"><?php echo $devide->total_pcs; ; ?></td>
-                                </tr>
                             </tbody>
                       </table>        
                    </div>
-                   
+                   <div class="offset-md-8 col-md-4 mt-5">
+                       <table class="table">
+                           <tr>
+                               <th style="width:50%">TOTAL PCS</th>
+                               <td><?php echo $devide->total_pcs; ; ?></td>
+                           </tr>
+                       </table>
+                   </div>
                </div>
            </div>
        </div>

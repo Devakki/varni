@@ -94,7 +94,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
                                     <div class="col-md-12">
                                         <div class="form-group row">
                                             <div class="col-md-12 text-center">
@@ -109,12 +108,13 @@
                     <?php if($display):?>
                     <div class="row m-t-50">
                         <div class="col-md-12 divscroll">
-                            <h4 class="m-t-10 header-title text-center">Debit Cloth </h4>
+                            <h4 class="m-t-10 header-title text-center">Devide Process</h4>
                             <?php if(isset($devide) && !empty($devide)) :?>
                             <table class="table text-center table-bordered m-t-0 restable" >
                                 <thead>
                                     <tr>
                                         <th>No</th> 
+                                        <th>Inv No</th> 
                                         <th>Challan No</th>   
                                         <th>Date</th>
                                         <th>Patla</th>
@@ -124,14 +124,21 @@
                                 <tbody>
                                     <?php $i=1; foreach ($devide as $key => $value):?>
                                     <tr>
-                                        
+                                        <?php
+                                            $devide_pcs[]=$value->total_pcs;
+                                        ?>
                                         <td><?php echo $i; ?></td>
                                         <td><?php echo $value->challan_no; ?></td>
+                                        <td><?php echo $value->cutlot_challan; ?></td>
                                         <td><?php echo date('d/m/Y', strtotime($value->date)); ?></td>
                                         <td><?php echo $value->patla_name; ?></td>
                                         <td><?php echo $value->total_pcs;  ?></td>
                                     </tr> 
                                     <?php $i++; endforeach;?>
+                                    <tr>
+                                        <td colspan="5"><b>Total</b></td>
+                                        <td><?php echo array_sum($devide_pcs);  ?></td>
+                                    </tr> 
                                 </tbody>
                             </table>
                         <?php else: ?>
@@ -139,29 +146,48 @@
                         <?php endif; ?>
                         </div>
                         <div class="col-md-12 divscroll">
-                            <h4 class="m-t-10 header-title text-center">Return </h4>
+                            <h4 class="m-t-10 header-title text-center">Return Process</h4>
                             <?php if(isset($returndevide) && !empty($returndevide)) :?>
                             <table class="table text-center table-bordered m-t-0 restable" >
                                 <thead>
                                     <tr>
                                         <th>No</th> 
-                                        <th>Challan No</th>   
+                                        <th>Inv No</th>  
+                                        <th>Challan No</th>  
                                         <th>Date</th>
                                         <th>Patla</th>
-                                        <th>Devide Pcs</th>
+                                        <th>Pcs</th>
+                                        <th>M Pcs</th>
+                                        <th>Rate</th>
+                                        <th>Total</th>
                                     </tr>                                  
                                 </thead>
                                 <tbody>
                                     <?php $i=1; foreach ($returndevide as $key => $value):?>
                                     <tr>
-                                        
+                                        <?php
+                                           $returndevide_pcs[]=$value->total_pcs;
+                                           $returndevide_mpcs[]=$value->miss_pcs;
+                                           $returndevide_g_total[]=$value->g_total;
+                                        ?>
                                         <td><?php echo $i; ?></td>
                                         <td><?php echo $value->challan_no; ?></td>
+                                        <td><?php echo $value->devide_challan_no; ?></td>
                                         <td><?php echo date('d/m/Y', strtotime($value->date)); ?></td>
                                         <td><?php echo $value->patla_name; ?></td>
                                         <td><?php echo $value->total_pcs;  ?></td>
+                                        <td><?php echo $value->miss_pcs;  ?></td>
+                                        <td><?php echo number_format($value->rate,1);  ?></td>
+                                        <td><?php echo number_format($value->g_total,1);  ?></td>
                                     </tr> 
                                     <?php $i++; endforeach;?>
+                                    <tr>
+                                        <td colspan="5"><b>Total</b></td>
+                                        <td><?php echo array_sum($returndevide_pcs);  ?></td>
+                                        <td><?php echo array_sum($returndevide_mpcs);  ?></td>
+                                        <td></td>
+                                        <td><?php echo number_format(array_sum($returndevide_g_total),1);  ?></td>
+                                    </tr> 
                                 </tbody>
                             </table>
                         <?php else: ?>
@@ -174,23 +200,33 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>  
+                                        <th>Inv No</th>
                                         <th>Date</th>
                                         <th>Patla</th>
-                                        <th>qty</th>
-                                        <th>total</th>
+                                        <th>Qty</th>
+                                        <th>Total</th>
                                     </tr>                                  
                                 </thead>
                                 <tbody>
                                     <?php $i=1; foreach ($color as $key => $value):?>
                                     <tr>
-                                        
+                                        <?php
+                                           $color_qty[]=$value->total_qty;
+                                           $color_total[]=$value->total;
+                                        ?>
                                         <td><?php echo $i; ?></td>
+                                        <td><?php echo $value->challan_no; ?></td>
                                         <td><?php echo date('d/m/Y', strtotime($value->date)); ?></td>
                                         <td><?php echo $value->patla_name; ?></td>
                                         <td><?php echo $value->total_qty; ?></td>
-                                        <td><?php echo $value->total;  ?></td>
+                                        <td><?php echo number_format($value->total,2);  ?></td>
                                     </tr> 
                                     <?php $i++; endforeach;?>
+                                    <tr>
+                                        <td colspan="4"><b>Total</b></td>
+                                        <td><?php echo array_sum($color_qty);  ?></td>
+                                        <td><?php echo number_format(array_sum($color_total),2);  ?></td>
+                                    </tr> 
                                 </tbody>
                             </table>
                         <?php else: ?>
@@ -209,7 +245,6 @@
 </div> 
 <script type="text/javascript">
 $(document).ready(function() {
-    
     jQuery('#date-range').datepicker({
         toggleActive: true,
         autoclose: true,

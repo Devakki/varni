@@ -19,7 +19,7 @@
                        <thead>
                        <tr>
                            <th>#</th>
-                           <th>C NO</th>
+                           <th>INV NO</th>
                            <th>DATE</th>
                            <th>PATLA</th>
                            <th>MONTH</th>
@@ -52,7 +52,7 @@
             "order": [[0, "DESC" ]],
             columns: [      
                         { "data": "sr_no" },
-                        { "data": "patlacolor_id" },
+                        { "data": "challan_no" },
                         { "data": "date"},
                         { "data": "patla_name" },
                         { "data": "month" },

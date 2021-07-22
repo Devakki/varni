@@ -21,7 +21,6 @@ class StockModel extends CI_Model
         $this->db->join('item as t3', 't1.item_id = t3.item_id', 'left');
         $this->db->join('transport as t4', 't1.transport_id = t4.transport_id', 'left');
         $this->db->join('master_admin as t5', 't1.user_id = t5.id_master', 'left');
-
        $query = $this->db->limit($limit,$start)->order_by($col,$dir)->get('stock as t1');
         if($query->num_rows()>0)
         {
@@ -48,7 +47,6 @@ class StockModel extends CI_Model
                         ->or_like('t1.marchant_no',$search)
                         ->or_like('t1.date',$search)
                         ->or_like('t1.total_meter',$search)
-                        ->or_like('t1.g_total',$search)
                 ->group_end()
                 ->limit($limit,$start)
                 ->order_by($col,$dir)
@@ -78,7 +76,7 @@ class StockModel extends CI_Model
                         ->or_like('t1.marchant_no',$search)
                         ->or_like('t1.date',$search)
                         ->or_like('t1.total_meter',$search)
-                        ->or_like('t1.g_total',$search)
+
                 ->group_end()
                 ->get();
         return $query->num_rows();
